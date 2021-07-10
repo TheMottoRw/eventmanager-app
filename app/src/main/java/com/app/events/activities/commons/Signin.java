@@ -28,6 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.MainActivity;
 import com.app.events.R;
+import com.app.events.activities.admin.Navigation;
 import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.business.AddEvent;
 import com.app.events.activities.business.BusinessSignup;
@@ -35,6 +36,8 @@ import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.standard.Signup;
 import com.app.events.activities.standard.ViewMyReservations;
 import com.app.events.utils.Helper;
+import com.app.events.utils.SwAlertHelper;
+import com.app.events.utils.Validator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,12 +54,16 @@ public class Signin extends Activity {
     private LinearLayout lnyHost;
     private TextView signupBusiness,signupStandard;
     private Helper helper;
+    private SwAlertHelper swHelper;
+    private Validator validator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_signin);
         helper = new Helper(getApplicationContext());
+        swHelper = new SwAlertHelper(this);
+        validator = new Validator();
         lnyHost = findViewById(R.id.lnyHost);
         edtPhone = findViewById(R.id.edtPhone);
         edtHost = findViewById(R.id.edtHost);
@@ -83,7 +90,8 @@ public class Signin extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login(edtPhone.getText().toString().trim(),edtPassword.getText().toString());
+                validateLogin();
+//                login(edtPhone.getText().toString().trim(),edtPassword.getText().toString());
 //                startActivity(new Intent(Signin.this, ViewEvents.class));
             }
         });
@@ -112,6 +120,19 @@ public class Signin extends Activity {
             }
         });
     }
+    void validateLogin(){
+        String phone = edtPhone.getText().toString().trim(),
+                password = edtPassword.getText().toString();
+        if(phone.isEmpty() || password.trim().isEmpty()){
+            swHelper.failed(getString(R.string.all_field_required));
+        }else{
+            if(!validator.phone(phone)){
+                swHelper.failed(getString(R.string.invalid_phone));
+            }else{
+                login(phone,password);
+            }
+        }
+    }
     public void login(final String phone,final String password) {
         final String url = helper.host+"/user/login";
         pgdialog.show();
@@ -138,7 +159,7 @@ public class Signin extends Activity {
                                         helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
                                         helper.showToast("Login success");
-                                        startActivity(new Intent(getApplicationContext(), ViewBusiness.class));
+                                        startActivity(new Intent(getApplicationContext(), Navigation.class));
                                     } else if (obj.getString("user_type").equals("Business")) {
                                         helper.setSession(obj.getString("id"), obj.getString("contact_number"), obj.getString("tin"), obj.getString("user_type"), obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);

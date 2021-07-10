@@ -14,13 +14,13 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
-        tools:replace="android:icon"
         android:usesCleartextTraffic="true"
-        >
-        <activity android:name=".activities.standard.Signup"></activity>
+        tools:replace="android:icon">
+        <activity android:name=".activities.admin.ConfirmEventAction"></activity>
+        <activity android:name=".activities.admin.Navigation" />
+        <activity android:name=".activities.standard.Signup" />
         <activity android:name=".activities.standard.ViewEventAgenda" />
-        <activity android:name=".activities.business.UploadImages" >
-        </activity>
+        <activity android:name=".activities.business.UploadImages" />
         <activity android:name=".activities.business.ViewEvents" />
         <activity android:name=".activities.business.Profile" />
         <activity android:name=".activities.standard.ViewMyReservations" />
@@ -28,13 +28,13 @@
         <activity android:name=".activities.standard.LandingReservation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.business.Dashboard" />
         <activity android:name=".activities.business.ViewReservations" />
-        <activity android:name=".activities.admin.ViewBusiness">
-        </activity>
+        <activity android:name=".activities.admin.ViewBusiness" />
         <activity android:name=".activities.business.AddEvent" />
         <activity android:name=".activities.business.BusinessSignup" />
         <activity android:name=".activities.Splash" />

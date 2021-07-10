@@ -2,20 +2,26 @@ package com.app.events.adapters.business;
 
 
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.events.R;
+import com.app.events.activities.admin.ConfirmEventAction;
 import com.app.events.activities.business.ViewReservations;
 import com.app.events.activities.standard.ViewEventAgenda;
 import com.app.events.utils.Helper;
@@ -28,6 +34,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 
 public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapters.business.ViewEventsAdapter.MyViewHolder> {
     public LinearLayout v;
@@ -38,6 +46,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public ViewEventsAdapter(Context context, JSONArray myDataset) {
+        super();
         mDataset = myDataset;
         ctx = context;
         helper = new Helper(ctx);
@@ -71,11 +80,16 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
             holder.eventStart.setText(sdf.format(sda.parse(currentObj.getString("event_kikoff"))));
             holder.briefDetails.setText(currentObj.getString("brief_description"));
             holder.eventEnd.setText(ctx.getString(R.string.event_kickon)+": "+ currentObj.getString("event_close"));
-            if(currentObj.getInt("reserved_seat")>0){
-                holder.availableSeat.setText(currentObj.getString("available_seat")+" People joining");
-            }else{
-                holder.availableSeat.setText("Only "+ currentObj.getString("available_seat")+" remaining seat");
+            if(!currentObj.has("reserved_seat")){//standard user reservation
+                holder.availableSeat.setText("Reserved on "+sdf.format(sda.parse(currentObj.getString("created_at").replace("T"," "))));
+            }else {//business owners
+                if (currentObj.getInt("reserved_seat") > 0) {
+                    holder.availableSeat.setText(currentObj.getString("reserved_seat") + " People joining");
+                } else {
+                    holder.availableSeat.setText("Only " + currentObj.getString("available_seat") + " remaining seat");
+                }
             }
+
             holder.eventPreparedBy.setText(ctx.getString(R.string.preparedBy)+": "+ currentObj.getString("business_name"));
             //set image icons
             String images = currentObj.getString("images");
@@ -85,15 +99,60 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
                         .error(ctx.getDrawable(R.drawable.logo))
                         .centerCrop().into(holder.imgBanners);
             }else{
-                Glide.with(ctx).load(images)
+                Glide.with(ctx).load(ctx.getDrawable(R.drawable.logo))
                         .error(ctx.getDrawable(R.drawable.logo))
                         .centerCrop().into(holder.imgBanners);
+            }
+            if(helper.hasSession()){
+                if(helper.getDataValue("user_type").equals("Admin")){
+                    if(currentObj.getString("status").equals("pending")) {
+                            holder.lnyApprovalLayout.setVisibility(View.VISIBLE);
+
+                        //Listen to approve and reject
+                        holder.btnApprove.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                            approve funct
+                                Intent intent = new Intent(ctx, ConfirmEventAction.class);
+                                intent.putExtra("action", "approve");
+                                intent.putExtra("status", "approved");
+                                try {
+                                    intent.putExtra("id", currentObj.getString("id"));
+                                    intent.putExtra("event_name", currentObj.getString("event_name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                ctx.startActivity(intent);
+                            }
+                        });
+                        holder.btnReject.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(ctx, ConfirmEventAction.class);
+                                intent.putExtra("action", "reject");
+                                intent.putExtra("status", "rejected");
+                                try {
+                                    intent.putExtra("id", currentObj.getString("id"));
+                                    intent.putExtra("event_name", currentObj.getString("event_name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                ctx.startActivity(intent);
+                            }
+                        });
+                    }
+                }else{
+                    holder.lnyApprovalLayout.setVisibility(View.GONE);
+                }
             }
 
             holder.lnlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(helper.hasSession() && helper.getDataValue("user_type").equals("Business")){
+                    if(helper.hasSession()){
+                        if(helper.getDataValue("user_type").equals("Business")){
                         //open view full with edit option
                         try {
                             Intent intent = new Intent(ctx, ViewReservations.class);
@@ -102,6 +161,12 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
                             ctx.startActivity(intent);
                         }catch (JSONException ex){
 
+                        }
+                        }else{
+                            Intent intent = new Intent(ctx, ViewEventAgenda.class);
+                            intent.putExtra("data",currentObj.toString());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            ctx.startActivity(intent);
                         }
                     }else{
                         //standard user open view agenda,with a reserve option
@@ -112,6 +177,8 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
                     }
                 }
             });
+
+
         } catch (JSONException ex) {
 
         } catch (ParseException e) {
@@ -133,11 +200,13 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
         // each data item is just a string in this case
         public TextView eventId,eventName,eventType,briefDetails,eventStart,eventEnd,availableSeat,eventPreparedBy;
         public ImageView imgBanners;
-        public LinearLayout lnlayout;
+        public LinearLayout lnlayout,lnyApprovalLayout;
+        public Button btnApprove,btnReject;
 
         public MyViewHolder(LinearLayout lny) {
             super(lny);
             lnlayout = lny.findViewById(R.id.lnyLayout);
+            lnyApprovalLayout = lny.findViewById(R.id.lnyApprovalLayout);
             eventId = lny.findViewById(R.id.eventId);
             imgBanners = lny.findViewById(R.id.imgBanners);
             eventName = lny.findViewById(R.id.eventName);
@@ -147,6 +216,8 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
             eventEnd = lny.findViewById(R.id.eventEnd);
             availableSeat = lny.findViewById(R.id.eventSeat);
             eventPreparedBy = lny.findViewById(R.id.eventPreparedBy);
+            btnApprove = lny.findViewById(R.id.btnApprove);
+            btnReject = lny.findViewById(R.id.btnReject);
             //tvMsg = lny.findViewById(R.id.tvRecyclerDate);
         }
     }

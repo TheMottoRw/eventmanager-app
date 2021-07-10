@@ -22,6 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 
 public class ViewReservationsAdapter extends RecyclerView.Adapter<com.app.events.adapters.business.ViewReservationsAdapter.MyViewHolder> {
     public LinearLayout v;
@@ -42,7 +45,7 @@ public class ViewReservationsAdapter extends RecyclerView.Adapter<com.app.events
                                                                                               int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_reservations, parent, false);
+                .inflate(R.layout.recycler_reservations_1, parent, false);
         com.app.events.adapters.business.ViewReservationsAdapter.MyViewHolder vh = new com.app.events.adapters.business.ViewReservationsAdapter.MyViewHolder(v);
         return vh;
     }
@@ -57,17 +60,22 @@ public class ViewReservationsAdapter extends RecyclerView.Adapter<com.app.events
             JSONObject currentObj = mDataset.getJSONObject(position);
             //Toast.makeText(ctx,currentObj.getString("cat_name")+"-"+currentObj.getString("cat_id"),Toast.LENGTH_SHORT).show();
             holder.reservationId.setText(currentObj.getString("id"));
-            holder.reservedBy.setText("Reserved by: "+currentObj.getString("reserver_name"));
+            holder.reservedBy.setText(currentObj.getString("reserver_name"));
             holder.reserverPhone.setText(currentObj.getString("reserver_phone"));
-            holder.eventReservedOn.setText("Reserved on "+currentObj.getString("created_at").substring(0,16));
-            holder.eventStart.setText(ctx.getString(R.string.event_kickoff)+": "+currentObj.getString("event_kikoff"));
+            SimpleDateFormat sda = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("E,MMM dd . hh:mm a");
+            holder.eventStart.setText(sdf.format(sda.parse(currentObj.getString("event_kikoff"))));
+            holder.eventReservedOn.setText("Reserved on "+sdf.format(sda.parse(currentObj.getString("created_at").replaceAll("T"," ").substring(0,16))));
+//            holder.eventStart.setText(ctx.getString(R.string.event_kickoff)+": "+currentObj.getString("event_kikoff"));
             holder.eventEnd.setText(ctx.getString(R.string.closetime)+": "+currentObj.getString("event_close"));
-            holder.eventName.setText(" ");
+            holder.eventName.setText(currentObj.getString("event_name"));
             //set image icons
 
 
         } catch (JSONException ex) {
 
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
     }

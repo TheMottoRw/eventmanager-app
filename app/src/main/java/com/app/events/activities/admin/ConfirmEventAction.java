@@ -1,18 +1,11 @@
-package com.app.events.activities.standard;
+package com.app.events.activities.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,9 +15,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
-import com.app.events.activities.admin.ViewBusiness;
-import com.app.events.activities.business.ViewEvents;
-import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.utils.Helper;
 
@@ -35,39 +25,53 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViewMyReservations extends AppCompatActivity
-{
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
+public class ConfirmEventAction extends AppCompatActivity {
     public Helper helper;
     public ProgressDialog pgdialog;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reserved_seats);
+        setContentView(R.layout.activity_confirm_event_action);
         helper = new Helper(this);
         pgdialog = new ProgressDialog(this);
-        pgdialog.setMessage(getString(R.string.loading));
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - My Reservations");
-        setSupportActionBar(toolbar);
-        recyclerView = findViewById(R.id.recycler_reservations);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        loadMyReservations();
+        pgdialog.setMessage(getString(R.string.senddata));
+        alert();
+    }
+    void alert(){
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE);
+        pDialog.setTitleText(getString(R.string.takeaction));
+        if(getIntent().getStringExtra("action").equals("approve")){
+            pDialog.setContentText("Confirm to approve publication of the event "+getIntent().getStringExtra("event_name"));
+        }else if(getIntent().getStringExtra("action").equals("reject")){
+            pDialog.setContentText("Confirm to reject publication of the event "+getIntent().getStringExtra("event_name"));
+        }
+        pDialog.setConfirmText("Confirm").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {//send request to approve/reject event
+                sweetAlertDialog.dismiss();
+                changeEventStatus();
+            }
+        });
+        pDialog.setCancelText("Cancel").setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+                finish();
+            }
+        });
+        pDialog.show();
     }
 
-    void loadMyReservations(){
-        final String url = helper.host+"/reservation/load?user_id="+helper.getDataValue("id");
-        Log.d("URL",url);
+    void changeEventStatus(){
+        final String url = helper.host+"/events/status/"+getIntent().getStringExtra("id");
         pgdialog.show();
+        Log.d("URL",url);
 //        tvLoggingIn.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 // prepare the Request
-        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest getRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -76,9 +80,8 @@ public class ViewMyReservations extends AppCompatActivity
                         Log.d("Logresp",response);
                         try{
                             JSONObject object = new JSONObject(response);
-                            JSONArray arr = object.getJSONArray("data");
-                            ViewEventsAdapter adapter = new ViewEventsAdapter(getApplicationContext(),arr);
-                            recyclerView.setAdapter(adapter);
+                            helper.showToast(object.getString("message"));
+                            finish();
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -97,6 +100,7 @@ public class ViewMyReservations extends AppCompatActivity
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "load");
+                params.put("status", getIntent().getStringExtra("status"));
                 return params;
             }
 
@@ -111,26 +115,4 @@ public class ViewMyReservations extends AppCompatActivity
 // add it to the RequestQueue
         queue.add(getRequest);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.standard, menu);
-        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
-        searchViewItem.setVisible(false);
-
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.logout){
-            helper.logout();
-            finish();
-            startActivity(new Intent(ViewMyReservations.this, Signin.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 }

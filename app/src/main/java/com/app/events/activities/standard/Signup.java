@@ -24,6 +24,8 @@ import com.app.events.R;
 import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.commons.Signin;
 import com.app.events.utils.Helper;
+import com.app.events.utils.SwAlertHelper;
+import com.app.events.utils.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,11 +38,15 @@ public class Signup extends Activity {
     private Button btnSignup;
     private ProgressDialog pgdialog;
     private Helper helper;
+    private SwAlertHelper swHelper;
+    private Validator validator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         helper = new Helper(getApplicationContext());
+        swHelper = new SwAlertHelper(this);
+        validator = new Validator();
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.senddata));
 
@@ -58,16 +64,31 @@ public class Signup extends Activity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(edtPassword.getText().toString().trim().equals(edtConfirmPassword.getText().toString().trim())){
-                    signup();
-                }else{
-                    helper.showToast(getString(R.string.passwordnotmatch));
-                }
+                validateSignup();
             }
         });
     }
 
-
+    void validateSignup(){
+        String phone = edtPhone.getText().toString().trim(),
+                names = edtNames.getText().toString().trim(),
+                email = edtEmail.getText().toString().trim(),
+                password = edtPassword.getText().toString(),
+                confirmPassword = edtConfirmPassword.getText().toString();
+        if(names.isEmpty() || phone.isEmpty() || email.isEmpty() || password.trim().isEmpty() || confirmPassword.isEmpty() ){
+            swHelper.failed(getString(R.string.all_field_required));
+        }else{
+            if(!validator.email(email)){
+                swHelper.failed(getString(R.string.invalid_email));
+            }else if(!validator.phone(phone)){
+                swHelper.failed(getString(R.string.invalid_phone));
+            }else if(!password.equals(confirmPassword)){
+                swHelper.failed(getString(R.string.passwordnotmatch));
+            }else{
+                signup();
+            }
+        }
+    }
     public void signup() {
         final String url = helper.host+"/users/";
         pgdialog.show();

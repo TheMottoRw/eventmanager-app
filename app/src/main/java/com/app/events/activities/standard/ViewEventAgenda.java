@@ -23,10 +23,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.ViewBusiness;
+import com.app.events.activities.business.AddEvent;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.utils.Helper;
+import com.app.events.utils.SwAlertHelper;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -38,9 +40,11 @@ import java.util.Map;
 
 public class ViewEventAgenda extends AppCompatActivity {
     public TextView eventName,eventType,eventKickOff,eventKickOn,eventBriefDetails,fullDescriptionAgenda,eventPreparedBy,availableSeat;
+    public Button arrowBack;
     public ImageView imgBanners;
     public Button btnReserve;
     public Helper helper;
+    public SwAlertHelper swHelper;
     public String event_id,business_id;
     public ProgressDialog pgdialog;
     private Toolbar toolbar;
@@ -49,6 +53,7 @@ public class ViewEventAgenda extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event_agenda);
         helper = new Helper(this);
+        swHelper = new SwAlertHelper(ViewEventAgenda.this);
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         initDefault();
@@ -59,6 +64,7 @@ public class ViewEventAgenda extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         imgBanners = findViewById(R.id.imgBanners);
+        arrowBack = findViewById(R.id.arrowBack);
         eventName = findViewById(R.id.eventName);
         eventType = findViewById(R.id.eventType);
         eventKickOff = findViewById(R.id.eventKickOff);
@@ -68,7 +74,12 @@ public class ViewEventAgenda extends AppCompatActivity {
         eventPreparedBy = findViewById(R.id.eventPreparedBy);
         availableSeat = findViewById(R.id.eventAvailableSeat);
         btnReserve = findViewById(R.id.btnReserve);
-
+        arrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         String object = getIntent().getStringExtra("data");
         try{
             JSONObject obj = new JSONObject(object);
@@ -83,9 +94,23 @@ public class ViewEventAgenda extends AppCompatActivity {
             eventKickOff.setText(obj.getString("event_kikoff"));
             eventKickOn.setText(obj.getString("event_close"));
             eventPreparedBy.setText(obj.getString("business_name"));
-            availableSeat.setText(obj.getString("available_seat"));
-            Glide.with(getApplicationContext()).load(obj.getString("images"))
-                    .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+            if(!obj.has("reserved_seat")) {
+                availableSeat.setText("Only "+obj.getString("available_seat")+" seat remaining");
+            }else{
+                if(obj.getInt("reserved_seat") > 0) {
+                    availableSeat.setText(obj.getString("reserved_seat") + " people are going");
+                }else{
+                    availableSeat.setText("Only "+obj.getString("available_seat")+" seat remaining");
+                }
+            }
+            if(!obj.getString("images").isEmpty()){
+                String[] images = obj.getString("images").split(",");
+                Glide.with(getApplicationContext()).load(images[0])
+                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+            }else{
+                Glide.with(getApplicationContext()).load(getDrawable(R.drawable.logo))
+                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+            }
 
         }catch (JSONException ex){
             Log.d("jsonerr","Error is "+ex.getMessage());
@@ -125,9 +150,11 @@ public class ViewEventAgenda extends AppCompatActivity {
                         Log.d("Logresp",response);
                         try{
                             JSONObject object = new JSONObject(response);
-                            if(object.getString("status").equals("ok")) {
-                                helper.showToast(object.getString("message"));
-                            } else  helper.showToast(object.getString("message"));
+                             if(object.getString("status").equals("ok")){
+                                        swHelper.success(object.getString("message"));
+                                    }else{
+                                        swHelper.failed(object.getString("message"));
+                                    }
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }

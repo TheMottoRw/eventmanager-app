@@ -95,10 +95,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/event_reservation_allowed"
-                    android:inputType="number"
                     style="@style/label"/>
                 <EditText
                     android:id="@+id/edtReservationAllowed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    style="@style/inputtext"
+                    />
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address"
+                    style="@style/label"/>
+                <EditText
+                    android:id="@+id/edtAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/inputtext"

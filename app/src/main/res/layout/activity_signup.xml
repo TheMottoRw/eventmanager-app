@@ -89,6 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/inputtext"
+                    android:inputType="number"
                     android:drawableStart="@drawable/ic_baseline_local_phone_24"
                     />
                 <TextView

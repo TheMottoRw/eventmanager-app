@@ -86,7 +86,6 @@
             <TextView
                 android:id="@+id/businessContact"
                 android:layout_width="wrap_content"
-                android:maxWidth="100dp"
                 android:layout_height="wrap_content"
                 android:text="0784634118"
                 android:layout_gravity="center_horizontal"

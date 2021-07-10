@@ -1,7 +1,9 @@
 package com.app.events.activities.standard;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
+import com.app.events.activities.admin.Navigation;
 import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
@@ -34,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +46,8 @@ public class LandingReservation extends AppCompatActivity {
     public ProgressDialog pgdialog;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private JSONArray allList,searchList;
+    private ViewEventsAdapter adapter;
     Toolbar toolbar;
 
     @Override
@@ -66,7 +72,9 @@ public class LandingReservation extends AppCompatActivity {
 //                "},{id:12,event_name:'President inauguration',event_type:'Inauguration for the elected president',event_kikoff:'2021-07-28 12:30',event_close:'2021-07-28 17:30',brief_description:'Will be broadcasted on TV Rwanda Broadcasting agency',banners:''}]";
         try {
             JSONArray arr = new JSONArray(jsonArr);
-            ViewEventsAdapter adapter = new ViewEventsAdapter(getApplicationContext(),arr);
+            allList = arr;
+            searchList = arr;
+            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
             recyclerView.setAdapter(adapter);
         }catch (JSONException ex){
             Log.d("jsonerr"," Json data error: "+ex.getMessage());
@@ -90,7 +98,9 @@ public class LandingReservation extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             JSONArray arr = object.getJSONArray("data");
-                            ViewEventsAdapter adapter = new ViewEventsAdapter(getApplicationContext(),arr);
+                            allList = arr;
+                            searchList = arr;
+                            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
                             recyclerView.setAdapter(adapter);
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
@@ -140,7 +150,54 @@ public class LandingReservation extends AppCompatActivity {
         }else{
             getMenuInflater().inflate(R.menu.signin,menu);
         }
+
+        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+             /*   if(list.contains(query)){
+                    adapter.getFilter().filter(query);
+                }else{
+                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                }*/
+                return false;
+
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchInEvents(newText);
+                return false;
+            }
+        });
+
+
         return true;
+    }
+    void searchInEvents(String keyword){
+        searchList = new JSONArray();
+
+        for(int i = 0;i<allList.length();i++){
+            try{
+                JSONObject obj = allList.getJSONObject(i);
+                if(obj.getString("event_name").toLowerCase().contains(keyword.toLowerCase()) || obj.getString("event_type").toLowerCase().contains(keyword.toLowerCase())){
+                    searchList.put(obj);
+                }
+            }catch (JSONException ex){
+
+            }
+        }
+        if(searchList.length()>0){
+            Log.d("SearchQy",keyword+"++++\n"+searchList.toString());
+            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
+            recyclerView.setAdapter(adapter);
+//            adapter.notifyDataSetChanged();
+//            recyclerView.refreshDrawableState();
+        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -163,7 +220,7 @@ public class LandingReservation extends AppCompatActivity {
             break;
             case "Admin":
                 if (id == R.id.business) {
-                    Intent intent1 = new Intent(this, ViewBusiness.class);
+                    Intent intent1 = new Intent(this, Navigation.class);
                     this.startActivity(intent1);
                     return true;
                 }

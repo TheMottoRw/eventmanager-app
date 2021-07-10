@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,6 +44,7 @@ public class ViewReservations extends AppCompatActivity {
     public ProgressDialog pgdialog;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    private TextView tvEventName,tvKickoffDate;
     private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,8 @@ public class ViewReservations extends AppCompatActivity {
         pgdialog.setMessage(getString(R.string.loading));
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name) + " - Reservations");
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -58,6 +64,8 @@ public class ViewReservations extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_reservations);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        tvEventName = findViewById(R.id.eventName);
+        tvKickoffDate = findViewById(R.id.eventStart);
         loadEventsReservation();
     }
     void loadEventsReservation(){
@@ -79,13 +87,19 @@ public class ViewReservations extends AppCompatActivity {
                             if(object.getString("status").equals("ok")) {
                                 JSONArray arr = object.getJSONArray("data");
                                 if(arr.length()>0) {
-                                    Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.app_name) + " - " + arr.getJSONObject(0).getString("event_name"));
+                                    SimpleDateFormat sda = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    SimpleDateFormat sdf = new SimpleDateFormat("E,MMM dd . hh:mm a");
+
+                                    tvEventName.setText(arr.getJSONObject(0).getString("event_name"));
+                                    tvKickoffDate.setText(sdf.format(sda.parse(arr.getJSONObject(0).getString("event_kikoff"))));
                                 }
                                 ViewReservationsAdapter adapter = new ViewReservationsAdapter(getApplicationContext(), arr);
                                 recyclerView.setAdapter(adapter);
                             }
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
                     }
                 },
@@ -123,6 +137,8 @@ public class ViewReservations extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.business, menu);
 
+        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
+        searchViewItem.setVisible(false);
 
         return true;
     }

@@ -4,152 +4,361 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightgrey"
     android:orientation="vertical"
     tools:context=".activities.standard.ViewEventAgenda">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@color/white"
         android:background="@color/colorPrimary"
-        app:title="@string/app_name"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:minHeight="?attr/actionBarSize"
+        app:title="@string/app_name"
+        app:titleTextColor="@color/white"
+        android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:orientation="vertical">
+
+            <Button
+                android:id="@+id/arrowBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/buttons"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:drawableEnd="@drawable/ic_baseline_arrow_back_ios_24"
+                android:drawablePadding="10dp"/>
+            <ImageView
+                android:id="@+id/imgBanners"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginTop="-35dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/eventNameLabel"
                     style="@style/agenda_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/event_name" />
+                    android:text="@string/event_name"
+                    android:visibility="gone"/>
 
                 <Button
-                    android:id="@+id/btnReserve"
+                    android:id="@+id/btnReserve0"
                     style="@style/buttons"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="10dp"
                     android:padding="0dp"
                     android:text="@string/reserve"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:drawableStart="@drawable/ic_baseline_done_outline_24"
+                    android:drawablePadding="10dp"/>
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/imgBanners"
+            <ScrollView
+                android:id="@+id/layout0"
                 android:layout_width="match_parent"
-                android:layout_height="120dp" />
+                android:layout_height="match_parent"
+                android:background="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            <TextView
-                android:id="@+id/eventName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
-                android:id="@+id/eventTypeLabel"
-                style="@style/agenda_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/event_type" />
-
-
-            <TextView
-                android:id="@+id/eventType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/eventBriefDetailsLabel"
-                style="@style/agenda_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/event_brief" />
+                    <TextView
+                        android:id="@+id/eventName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"
+                        android:paddingLeft="10dp"
+                        android:text="."
+                        android:gravity="left"/>
 
 
-            <TextView
-                android:id="@+id/eventBriefDetails"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/eventType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/grey"
+                        android:textSize="12sp"
+                        android:paddingLeft="10dp"
+                        android:text="."
+                        android:gravity="left"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/recyclerview">
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="2">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="@drawable/shadow"
+                                android:padding="20dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Date"
+                                    android:drawableStart="@drawable/ic_baseline_access_time_24_blue"
+                                    android:drawablePadding="7dp"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textStyle="bold"/>
+                                <TextView
+                                    android:id="@+id/eventKickOff"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fri,Jun 12 11:34 PM"
+                                    android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/eventKickOffLabel"
-                style="@style/agenda_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/event_kickoff" />
-
-
-            <TextView
-                android:id="@+id/eventKickOff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/eventKickOnLabel"
-                style="@style/agenda_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/event_kickon" />
-
-
-            <TextView
-                android:id="@+id/eventKickOn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/eventAvailableSeatLabel"
-                style="@style/agenda_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/available_seat" />
-
-
-            <TextView
-                android:id="@+id/eventAvailableSeat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
-                android:id="@+id/eventFullDescriptionAgendaLabel"
-                style="@style/agenda_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/event_full_agenda" />
+                                <TextView
+                                    android:id="@+id/eventKickOn"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fri,Jun 12 11:34 PM"
+                                    android:textSize="13sp"
+                                    android:visibility="gone"/>
 
 
-            <TextView
-                android:id="@+id/eventFullDescriptionAgenda"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                            </LinearLayout>
 
-            <TextView
-                android:id="@+id/eventPreparedByLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/preparedBy"
-                style="@style/agenda_label"/>
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="@drawable/shadow"
+                                android:padding="20dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Location"
+                                    android:drawableStart="@drawable/ic_baseline_location_on_24"
+                                    android:drawablePadding="7dp"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorPrimary"/>
+                                <TextView
+                                    android:id="@+id/eventAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Kigali,Rwanda"
+                                    android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/eventPreparedBy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                            </LinearLayout>
+                    </GridLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:background="@drawable/shadow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ARE YOU ATTENDING?"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"/>
+                        <Button
+                            android:id="@+id/btnReserve"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:background="@drawable/buttons"
+                            android:text="YES"
+                            android:textColor="@color/white"
+                            android:layout_marginLeft="15dp"/>
+                    </LinearLayout>
+</LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:background="@drawable/line"
+                        android:visibility="gone"
+                        />
+                    <TextView
+                        android:id="@+id/eventAvailableSeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:text="10 People are going"
+                        />
+                    <TextView
+                        android:id="@+id/eventBriefDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:text="Full demo"
+                        />
+
+                    <TextView
+                        android:id="@+id/eventFullDescriptionAgenda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:text="Full Agenda"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:id="@+id/eventPreparedBy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:padding="10dp"
+                        android:textColor="@color/grey"
+                        android:textStyle="bold"
+                        android:text="Company"
+                        />
+                </LinearLayout>
+            </ScrollView>
+<!--            <ScrollView-->
+<!--                android:id="@+id/layout1"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@drawable/topround"                    android:paddingLeft="30dp"-->
+<!--                android:layout_marginTop="10dp">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:paddingRight="30dp"-->
+<!--                    >-->
+<!--                    <Button-->
+<!--                        android:id="@+id/btnReserve"-->
+<!--                        style="@style/buttons"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:layout_marginLeft="0dp"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:padding="0dp"-->
+<!--                        android:text="@string/reserve"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:drawableStart="@drawable/ic_baseline_done_outline_24"-->
+<!--                        android:drawablePadding="10dp"/>-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventTypeLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/event_type" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventType"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventBriefDetailsLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/event_brief" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventBriefDetails"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventKickOffLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/event_kickoff" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventKickOff"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventKickOnLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/event_kickon" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventKickOn"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventAvailableSeatLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/available_seat" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventAvailableSeat"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventFullDescriptionAgendaLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/event_full_agenda" />-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventFullDescriptionAgenda"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventPreparedByLabel"-->
+<!--                        style="@style/agenda_label"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/preparedBy" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/eventPreparedBy"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content" />-->
+
+<!--                </LinearLayout>-->
+<!--            </ScrollView>-->
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>

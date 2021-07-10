@@ -52,6 +52,8 @@ import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.commons.GalleryAdapter;
 import com.app.events.utils.Helper;
 import com.app.events.utils.RequestHandler;
+import com.app.events.utils.SwAlertHelper;
+import com.app.events.utils.Validator;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
@@ -66,10 +68,12 @@ import java.util.Map;
 import java.util.Objects;
 
 public class AddEvent extends AppCompatActivity {
-    private EditText edtEventName,edtEventType,edtEventBriefDescription,edtReservationAllowed,edtFullAgenda;
+    private EditText edtEventName,edtEventType,edtEventBriefDescription,edtReservationAllowed,edtFullAgenda,edtAddress;
     private Button btnKickOffDate,btnKickOffTime,btnKickOnDate,btnKickOnTime,btnBanners,btnCreate;
     private ProgressDialog pgdialog;
     private Helper helper;
+    private SwAlertHelper swHelper;
+    private Validator validator;
     int mYear,mMonth,mDay,mHour,mMinute;
     /*Image upload variables*/
     String encodedString;
@@ -97,6 +101,8 @@ public class AddEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         helper = new Helper(getApplicationContext());
+        swHelper = new SwAlertHelper(AddEvent.this);
+        validator = new Validator();
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.senddata));
         initDefault();
@@ -117,6 +123,7 @@ public class AddEvent extends AppCompatActivity {
         btnKickOffTime = findViewById(R.id.btnKickOffTime);
         btnKickOnDate = findViewById(R.id.btnCloseDate);
         btnKickOnTime = findViewById(R.id.btnCloseTime);
+        edtAddress = findViewById(R.id.edtAddress);
         btnBanners = findViewById(R.id.btnBanners);
         gvGallery = findViewById(R.id.grdView);
         btnCreate = findViewById(R.id.btnNext);
@@ -132,7 +139,8 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                save(); //without image upload
-                triggerSaveWithImageUpload(); // with image uploading
+//                triggerSaveWithImageUpload(); // with image uploading
+                validateEventDetails();
             }
 
         });
@@ -201,80 +209,28 @@ public class AddEvent extends AppCompatActivity {
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-    public void save() {
-        final String url = helper.host+"/events/";
-        pgdialog.show();
-//        tvLoggingIn.setVisibility(View.VISIBLE);
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-// prepare the Request
-        StringRequest getRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // display response
-                        pgdialog.dismiss();
-                        Log.d("Logresp",response);
-                        try{
-                            JSONObject obj = new JSONObject(response);
-                          if(obj.getString("status").equals("ok")){
-                              helper.showToast(obj.getString("message"));
-                            } else  helper.showToast("Wrong username or password");
-                        }catch (JSONException ex){
-                            helper.showToast("Json error "+ex.getMessage());
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        pgdialog.dismiss();
-                        helper.showToast("Something went wrong");
-                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("cate", "register");
-                params.put("business_id", helper.getDataValue("id"));
-                params.put("event_name", edtEventName.getText().toString().trim());
-                params.put("event_type",edtEventType.getText().toString().trim());
-                params.put("brief_description", edtEventBriefDescription.getText().toString().trim());
-                params.put("full_description", edtFullAgenda.getText().toString().trim());
-                params.put("images", "");
-//                params.put("event_kikoff", btnKickOff.getText().toString().trim());
-                params.put("event_kikoff", btnKickOffDate.getText().toString()+" "+btnKickOffTime.getText().toString());
-                params.put("event_close", btnKickOnDate.getText().toString()+" "+btnKickOnTime.getText());
-//                params.put("event_close", btnKickOn.getText().toString().trim());
-                params.put("reservation_allowed", edtReservationAllowed.getText().toString().trim());
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                final Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", helper.getDataValue("appid"));//put your token here
-                return headers;
-            }
-        };;
-
-// add it to the RequestQueue
-        queue.add(getRequest);
-    }
-    
     /* Preparing image to upload*/
 
 
-    private boolean validateProductDetails(){
+    private boolean validateEventDetails(){
         String message = "";
         boolean isValid = true;
-        if(path.size() >3)
-            message = "Only 3 Images needed to describe your product";
-        if(!message.equals("")){
-            isValid = false;
-            Snackbar.make(spnCategory,message,Snackbar.LENGTH_LONG).show();
-        }
+        String eventName =  edtEventName.getText().toString().trim(),
+                eventType = edtEventType.getText().toString().trim(),
+                brief = edtEventBriefDescription.getText().toString().trim(),
+                seat = edtReservationAllowed.getText().toString().trim(),
+                address = edtAddress.getText().toString().trim(),
+                kikoffdate = btnKickOffDate.getText().toString(),
+                kikofftime = btnKickOffTime.getText().toString();
+
+        if(eventName.isEmpty() || eventType.isEmpty() || brief.isEmpty() || seat.isEmpty() || address.isEmpty() || kikoffdate.equals(getString(R.string.kickoffdate)) || kikofftime.equals(getString(R.string.kickofftime))){
+            swHelper.failed(getString(R.string.all_field_and_time_required));
+        }else if(path.size()<3){
+            swHelper.failed(getString(R.string._3_images_required));
+            } else{
+                triggerSaveWithImageUpload();
+            }
+
         return isValid;
     }
 
@@ -518,11 +474,17 @@ public class AddEvent extends AppCompatActivity {
                 try {
                     JSONObject obj = new JSONObject(s);
                     edtEventName.setText("");edtEventType.setText("");edtEventBriefDescription.setText("");
+                    edtAddress.setText("");
                     btnKickOffDate.setText(getString(R.string.kickoffdate));btnKickOffTime.setText(getString(R.string.kickofftime));
                     btnKickOnDate.setText(getString(R.string.closedate));btnKickOnTime.setText(getString(R.string.closetime));
                     edtReservationAllowed.setText("");
-                    helper.showToast(obj.getString("message"));
-                }catch (JSONException ex){
+                    pgdialog.dismiss();
+                        if(obj.getString("status").equals("ok")){
+                            swHelper.success(obj.getString("message"));
+                        }else{
+                            swHelper.failed(obj.getString("message"));
+                        }
+                    }catch (JSONException ex){
                     Log.d("jsonerr","Error "+ex.getMessage()+"===="+s);
                 }
 
@@ -546,9 +508,11 @@ public class AddEvent extends AppCompatActivity {
                 params.put("event_close", btnKickOnDate.getText().toString()+" "+btnKickOnTime.getText());
 //                params.put("event_close", btnKickOn.getText().toString().trim());
                 params.put("reservation_allowed", edtReservationAllowed.getText().toString().trim());
+                params.put("address", edtAddress.getText().toString().trim());
                 params.put("user_id", "1");
                 Log.d("URLPars",params.toString());
                 String result = rh.sendPostRequest(url,params);
+                Log.d("Log resp","Resp "+result);
 
 
                 return result;
@@ -566,6 +530,8 @@ public class AddEvent extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.business, menu);
 
+        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
+        searchViewItem.setVisible(false);
 
         return true;
     }
