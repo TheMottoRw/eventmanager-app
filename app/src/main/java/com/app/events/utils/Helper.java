@@ -37,7 +37,7 @@ public class Helper {
     public String getHost(){
         String local = "http://192.168.43.161/RUT/Methode/api/requests",
                 remote = "http://192.168.1.8/RUT/Methode/api/requests";
-        return getEditor().getString("host","http://192.168.1.14/RUT/Methode/armory/api/requests");
+        return getEditor().getString("host","http://192.168.43.161:8000");
     }
 
     public void showToast(String message){
@@ -62,7 +62,7 @@ public class Helper {
         sh.apply();
     }
     public boolean hasSession(){
-        return this.getEditor().contains("sess_id");
+        return this.getEditor().contains("id");
     }
     public String getDataValue(String parameter){
         SharedPreferences sh = ctx.getSharedPreferences("events",Context.MODE_PRIVATE);

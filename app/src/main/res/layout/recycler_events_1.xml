@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/shadow"
+    android:padding="12dp"
+    android:layout_margin="2dp"
+    android:id="@+id/lnyLayout">
+
+    <LinearLayout
+        android:id="@+id/singleEventHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imgBanners"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/eventId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="7dp">
+
+            <TextView
+                android:id="@+id/eventStartIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_baseline_access_time_24_blue"
+                android:drawablePadding="1dp"/>
+            <TextView
+                android:id="@+id/eventStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:text="Start: 2021-09-11 12:00"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:paddingLeft="2dp"
+                android:layout_toRightOf="@+id/eventStartIcon"/>
+            <TextView
+                android:id="@+id/eventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:text="Event planner: KayKen"
+                android:textSize="14sp"
+                android:layout_below="@id/eventStart"
+                android:textStyle="bold"
+                android:paddingTop="5dp"/>
+
+            <TextView
+                android:id="@+id/eventBriefDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Are you attending:"
+                android:textSize="13sp"
+                android:layout_marginTop="0dp"
+                android:layout_below="@id/eventName"/>
+
+            <TextView
+                android:id="@+id/eventLiner"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:paddingLeft="3dp"
+                android:layout_below="@id/eventBriefDetails"
+                android:background="@drawable/line"/>
+            <TextView
+                android:id="@+id/eventSeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seat:  2021-09-11 12:00"
+                android:textSize="11sp"
+                android:paddingLeft="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_below="@id/eventLiner"
+                android:layout_marginTop="3dp"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/eventType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event name: Partying"
+            android:layout_gravity="center_horizontal"
+            android:textSize="12sp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/eventName"
+            android:visibility="gone"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/recyclerview_item"
+                    android:text="Location"
+                    android:layout_rowWeight="1"/>
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/recyclerview_item"
+                    android:text="Date"/>
+            </TableRow>
+            <TableRow>
+            </TableRow>
+
+        </TableLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/singleEventHolder1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/eventPreparedBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xxx"
+            android:textSize="10sp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_below="@id/eventSeat"
+            android:textStyle="italic"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/eventEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End:  2021-09-11 12:00"
+            android:textSize="12sp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="0dp"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/attendyes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:background="@drawable/buttons"/>
+        <Button
+            android:id="@+id/attendNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yes"
+            android:background="@drawable/buttons"/>
+    </LinearLayout>
+</LinearLayout>

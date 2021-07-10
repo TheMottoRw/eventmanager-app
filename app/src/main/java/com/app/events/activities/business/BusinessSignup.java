@@ -1,11 +1,13 @@
-package com.app.events.activities;
+package com.app.events.activities.business;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,6 +20,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.MainActivity;
 import com.app.events.R;
+import com.app.events.activities.admin.ViewBusiness;
+import com.app.events.activities.commons.Signin;
+import com.app.events.activities.standard.LandingReservation;
 import com.app.events.utils.Helper;
 
 import org.json.JSONException;
@@ -26,31 +31,47 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddEvent extends AppCompatActivity {
-    private EditText edtEventName,edtEventType,edtEventBriefDescription,edtReservationAllowed,edtFullAgenda;
-    private Button btnKickOff,btnKickOn,btnBanners;
+public class BusinessSignup extends Activity {
+    private EditText edtBusinessName,edtBusinessType,edtBusinessTin,edtPhone,edtAddress,edtPassword,edtConfirmPassword;
+    private Button btnSignup;
     private ProgressDialog pgdialog;
     private Helper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_business_signup);
         helper = new Helper(getApplicationContext());
         pgdialog = new ProgressDialog(this);
-    }
-    public void initDefault(){
-        edtEventName = findViewById(R.id.edtEventName);
-        edtEventType = findViewById(R.id.edtEventType);
-        edtEventBriefDescription = findViewById(R.id.edtEventBriefDescription);
-        edtReservationAllowed = findViewById(R.id.edtReservationAllowed);
-        edtFullAgenda = findViewById(R.id.edtFullAgenda);
-        btnKickOff = findViewById(R.id.btnKickOff);
-        btnKickOn = findViewById(R.id.btnKickOn);
-        btnBanners = findViewById(R.id.btnBanners);
+        pgdialog.setMessage(getString(R.string.senddata));
 
+        initDefault();
     }
-    public void save() {
-        final String url = helper.host+"/events/";
+
+    public void initDefault(){
+        edtBusinessName = findViewById(R.id.edtBusinessName);
+        edtBusinessType = findViewById(R.id.edtBusinessType);
+        edtBusinessTin = findViewById(R.id.edtBusinessTin);
+        edtPhone = findViewById(R.id.edtPhone);
+        edtAddress = findViewById(R.id.edtAddress);
+        edtPassword = findViewById(R.id.edtPassword);
+        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        btnSignup = findViewById(R.id.btnSignup);
+
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(edtPassword.getText().toString().trim().equals(edtConfirmPassword.getText().toString().trim())){
+                    signup();
+                }else{
+                    helper.showToast(getString(R.string.passwordnotmatch));
+                }
+            }
+        });
+    }
+
+
+    public void signup() {
+        final String url = helper.host+"/business/";
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -60,6 +81,8 @@ public class AddEvent extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // display response
+                        edtBusinessName.setText("");edtBusinessType.setText("");edtBusinessTin.setText("");  edtPhone.setText(""); edtAddress.setText("");
+                        edtPassword.setText(""); edtConfirmPassword.setText("");
                         pgdialog.dismiss();
                         Log.d("Logresp",response);
                         try{
@@ -67,16 +90,11 @@ public class AddEvent extends AppCompatActivity {
                             if(object.getString("status").equals("ok")) {
                                 JSONObject obj = object.getJSONObject("data");
                                 if(obj.has("user_type")) {
-                                    if (obj.getString("user_type").equals("Admin")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
+                                    helper.showToast(object.getString("message"));
+                                    if (obj.getString("user_type").equals("Business")) {
+                                        helper.setSession(obj.getString("id"), obj.getString("contact_number"), obj.getString("tin"), obj.getString("user_type"), obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
-                                        helper.showToast("Login success");
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                    } else if (obj.getString("user_type").equals("Police")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
-//                                tvLoggingIn.setVisibility(View.GONE);
-                                        helper.showToast("Login success");
-//                                        startActivity(new Intent(getApplicationContext(), PoliceAllocation.class));
+                                        startActivity(new Intent(getApplicationContext(), ViewEvents.class));
                                     } else helper.showToast("Wrong username or password");
                                 } else helper.showToast("Access denied");
                             } else  helper.showToast("Wrong username or password");
@@ -97,15 +115,12 @@ public class AddEvent extends AppCompatActivity {
             @Override
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("cate", "register");
-                params.put("event_name", edtEventName.getText().toString().trim());
-                params.put("event_type",edtEventType.getText().toString().trim());
-                params.put("brief_description", edtEventBriefDescription.getText().toString().trim());
-                params.put("full_description", edtFullAgenda.getText().toString().trim());
-                params.put("images", edtEventName.getText().toString().trim());
-                params.put("event_kikoff", btnKickOff.getText().toString().trim());
-                params.put("event_close", btnKickOn.getText().toString().trim());
-                params.put("reservation_allowed", edtReservationAllowed.getText().toString().trim());
+                params.put("name", edtBusinessName.getText().toString().trim());
+                params.put("business_type",edtBusinessType.getText().toString().trim());
+                params.put("tin", edtBusinessTin.getText().toString().trim());
+                params.put("phone", edtPhone.getText().toString().trim());
+                params.put("address", edtAddress.getText().toString().trim());
+                params.put("password", edtPassword.getText().toString().trim());
                 return params;
             }
 
@@ -120,5 +135,4 @@ public class AddEvent extends AppCompatActivity {
 // add it to the RequestQueue
         queue.add(getRequest);
     }
-
 }

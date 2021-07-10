@@ -1,24 +1,30 @@
 <resources>
-    <string name="app_name">Events</string>
+    <string name="app_name">Emera</string>
     <string name="header">Event Reservation</string>
     <string name="business_account_header">Create a business account</string>
+    <string name="create_account">Create account</string>
     <string name="phone">Phone</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="signin_header">Signin to make reservation</string>
     <string name="signin">Signin</string>
     <string name="logout">Logout</string>
     <string name="loading">Loading...</string>
     <string name="trylogin">Trying to login...</string>
     <string name="senddata">Sending data...</string>
+    <string name="preparedBy">Prepared by</string>
 
     <string name="names">Names</string>
     <string name="business_name">Business name</string>
     <string name="business_type">Business type</string>
-    <string name="business_tin">TIN Number</string>
+    <string name="business_tin">TIN</string>
     <string name="address">Address</string>
     <string name="email">Email</string>
     <string name="signup">Create account</string>
+    <string name="create">Create</string>
 
-<!--    Event strings-->
+    <!--    Event strings-->
+    <string name="event_header">Create an event</string>
     <string name="event_name">Event name</string>
     <string name="event_type">Event type</string>
     <string name="event_kickoff">Kick off time</string>
@@ -28,4 +34,13 @@
     <string name="event_full_agenda">Full description and agenda</string>
     <string name="event_reservation_allowed">Available seat</string>
     <string name="next">Next</string>
+    <string name="available_seat">Available seat</string>
+    <string name="reserve">Reserve</string>
+    <string name="signup_business">Sign up as a business account</string>
+    <string name="signup_standard">Sign up as a standard account</string>
+    <string name="kickoffdate">Kickoff Date</string>
+    <string name="kickofftime">Kickoff Time</string>
+    <string name="closedate">Closing Date</string>
+    <string name="closetime">Closing Time</string>
+    <string name="passwordnotmatch">Password does not match</string>
 </resources>

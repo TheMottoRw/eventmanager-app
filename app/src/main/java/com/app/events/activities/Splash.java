@@ -3,14 +3,16 @@ package com.app.events.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.app.events.MainActivity;
 import com.app.events.R;
+import com.app.events.activities.commons.Signin;
 import com.app.events.utils.Helper;
 
-public class Splash extends AppCompatActivity {
+public class Splash extends Activity {
     private Helper helper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +21,7 @@ public class Splash extends AppCompatActivity {
         helper = new Helper(this);
         if(!helper.hasSession()){
             finish();
-            startActivity(new Intent(getApplicationContext(),Signin.class));
+            startActivity(new Intent(getApplicationContext(), Signin.class));
         } else {
             if(helper.getDataValue("user_type").equals("Admin")){
                 startActivity(new Intent(this, MainActivity.class));

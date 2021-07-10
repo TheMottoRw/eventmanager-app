@@ -1,7 +1,9 @@
-package com.app.events.activities;
+package com.app.events.activities.standard;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.MainActivity;
 import com.app.events.R;
+import com.app.events.activities.admin.ViewBusiness;
+import com.app.events.activities.commons.Signin;
 import com.app.events.utils.Helper;
 
 import org.json.JSONException;
@@ -27,8 +31,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Signup extends AppCompatActivity {
-    private EditText edtBusinessName,edtBusinessType,edtBusinessTin,edtPhone,edtAddress,edtPassword;
+public class Signup extends Activity {
+    private EditText edtNames,edtEmail,edtPhone,edtPassword,edtConfirmPassword;
     private Button btnSignup;
     private ProgressDialog pgdialog;
     private Helper helper;
@@ -44,25 +48,28 @@ public class Signup extends AppCompatActivity {
     }
 
     public void initDefault(){
-        edtBusinessName = findViewById(R.id.edtBusinessName);
-        edtBusinessType = findViewById(R.id.edtBusinessType);
-        edtBusinessTin = findViewById(R.id.edtBusinessTin);
+        edtNames = findViewById(R.id.edtName);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
         edtPhone = findViewById(R.id.edtPhone);
-        edtAddress = findViewById(R.id.edtAddress);
         edtPassword = findViewById(R.id.edtPassword);
         btnSignup = findViewById(R.id.btnSignup);
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signup();
+                if(edtPassword.getText().toString().trim().equals(edtConfirmPassword.getText().toString().trim())){
+                    signup();
+                }else{
+                    helper.showToast(getString(R.string.passwordnotmatch));
+                }
             }
         });
     }
 
 
     public void signup() {
-        final String url = helper.host+"/business/";
+        final String url = helper.host+"/users/";
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -72,6 +79,7 @@ public class Signup extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // display response
+                        edtNames.setText("");edtEmail.setText("");edtPhone.setText("");  edtPassword.setText(""); edtConfirmPassword.setText("");
                         pgdialog.dismiss();
                         Log.d("Logresp",response);
                         try{
@@ -79,19 +87,15 @@ public class Signup extends AppCompatActivity {
                             if(object.getString("status").equals("ok")) {
                                 JSONObject obj = object.getJSONObject("data");
                                 if(obj.has("user_type")) {
-                                    if (obj.getString("user_type").equals("Admin")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
-//                                tvLoggingIn.setVisibility(View.GONE);
-                                        helper.showToast("Login success");
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                    } else if (obj.getString("user_type").equals("Police")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
-//                                tvLoggingIn.setVisibility(View.GONE);
-                                        helper.showToast("Login success");
-//                                        startActivity(new Intent(getApplicationContext(), PoliceAllocation.class));
-                                    } else helper.showToast("Wrong username or password");
-                                } else helper.showToast("Access denied");
-                            } else  helper.showToast("Wrong username or password");
+                                    helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
+                                    helper.showToast(object.getString("message"));
+                                    if (obj.getString("user_type").equals("Standard")) {
+                                        startActivity(new Intent(getApplicationContext(), LandingReservation.class));
+                                    }else if (obj.getString("user_type").equals("Admin")) {
+                                        startActivity(new Intent(getApplicationContext(), ViewBusiness.class));
+                                    }
+                                }
+                            } else  helper.showToast("Something went wrong");
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -110,11 +114,9 @@ public class Signup extends AppCompatActivity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "register");
-                params.put("name", edtBusinessName.getText().toString().trim());
-                params.put("business_type",edtBusinessType.getText().toString().trim());
-                params.put("tin", edtBusinessTin.getText().toString().trim());
+                params.put("name", edtNames.getText().toString().trim());
+                params.put("email",edtEmail.getText().toString().trim());
                 params.put("phone", edtPhone.getText().toString().trim());
-                params.put("address", edtAddress.getText().toString().trim());
                 params.put("password", edtPassword.getText().toString().trim());
                 return params;
             }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/recyclerview"
+    android:padding="12dp"
+    android:layout_margin="3dp">
+
+
+    <LinearLayout
+        android:id="@+id/singleBusinessHolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/businessId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/businessName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:text="KayKen"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/businessType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electronics"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="10sp"
+                android:paddingLeft="7dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/businessName"/>
+    </RelativeLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/singleEventHolder1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/businessTin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:text="TIN: 0001"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/businessContact"
+                android:layout_width="wrap_content"
+                android:maxWidth="100dp"
+                android:layout_height="wrap_content"
+                android:text="0784634118"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
+                android:textSize="10sp"
+                android:paddingLeft="7dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/businessTin"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/businessAddress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Address:"
+            android:textSize="11sp"/>
+    </LinearLayout>
+</LinearLayout>

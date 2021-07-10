@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.Signin"
+    tools:context=".activities.standard.Signup"
     android:layout_gravity="center"
     android:orientation="vertical"
     android:paddingLeft="30dp"
@@ -33,6 +33,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/logo"
+                android:contentDescription="@string/app_name"
                 />
             <LinearLayout
                 android:id="@+id/lnyLogin"
@@ -45,47 +46,36 @@
                     android:id="@+id/tvheade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/business_account_header"
+                    android:text="@string/create_account"
                     style="@style/header"/>
 
                 <TextView
                     android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/business_name"
+                    android:text="@string/names"
                     style="@style/label"/>
                 <EditText
-                    android:id="@+id/edtBusinessName"
+                    android:id="@+id/edtName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/inputtext"
+                    android:drawableStart="@drawable/ic_baseline_text_format_24"
                     />
 
                 <TextView
-                    android:id="@+id/tvBusinessType"
+                    android:id="@+id/tvEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/business_type"
+                    android:text="@string/email"
                     style="@style/label"/>
                 <EditText
-                    android:id="@+id/edtBusinessType"
+                    android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     style="@style/inputtext"
-                    />
-                <TextView
-                    android:id="@+id/tvTin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/business_tin"
-                    style="@style/label"/>
-                <EditText
-                    android:id="@+id/edtBusinessTin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/inputtext"
-                    android:inputType="number"
+                    android:drawableStart="@drawable/ic_baseline_email_24"
                     />
                 <TextView
                     android:id="@+id/tvPhone"
@@ -99,19 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/inputtext"
-                    />
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/address"
-                    style="@style/label"/>
-                <EditText
-                    android:id="@+id/edtAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/inputtext"
-                    android:minLines="3"
+                    android:drawableStart="@drawable/ic_baseline_local_phone_24"
                     />
                 <TextView
                     android:id="@+id/tvPassword"
@@ -125,13 +103,31 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     style="@style/inputtext"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
+                    />
+
+                <TextView
+                    android:id="@+id/tvConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm_password"
+                    style="@style/label"/>
+                <EditText
+                    android:id="@+id/edtConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    style="@style/inputtext"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
                     />
                 <Button
                     android:id="@+id/btnSignup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup"
+                    android:text="@string/create_account"
                     style="@style/buttons"
+                    android:paddingRight="15dp"
+                    android:drawableEnd="@drawable/ic_baseline_open_in_new_24"
                     />
             </LinearLayout>
             <LinearLayout

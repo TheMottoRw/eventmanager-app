@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.standard.ViewEventAgenda">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/white"
+        android:background="@color/colorPrimary"
+        app:title="@string/app_name"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/eventNameLabel"
+                    style="@style/agenda_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/event_name" />
+
+                <Button
+                    android:id="@+id/btnReserve"
+                    style="@style/buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="0dp"
+                    android:text="@string/reserve"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgBanners"
+                android:layout_width="match_parent"
+                android:layout_height="120dp" />
+
+            <TextView
+                android:id="@+id/eventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/eventTypeLabel"
+                style="@style/agenda_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_type" />
+
+
+            <TextView
+                android:id="@+id/eventType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/eventBriefDetailsLabel"
+                style="@style/agenda_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_brief" />
+
+
+            <TextView
+                android:id="@+id/eventBriefDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/eventKickOffLabel"
+                style="@style/agenda_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_kickoff" />
+
+
+            <TextView
+                android:id="@+id/eventKickOff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/eventKickOnLabel"
+                style="@style/agenda_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_kickon" />
+
+
+            <TextView
+                android:id="@+id/eventKickOn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/eventAvailableSeatLabel"
+                style="@style/agenda_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/available_seat" />
+
+
+            <TextView
+                android:id="@+id/eventAvailableSeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/eventFullDescriptionAgendaLabel"
+                style="@style/agenda_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_full_agenda" />
+
+
+            <TextView
+                android:id="@+id/eventFullDescriptionAgenda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/eventPreparedByLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/preparedBy"
+                style="@style/agenda_label"/>
+
+            <TextView
+                android:id="@+id/eventPreparedBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
