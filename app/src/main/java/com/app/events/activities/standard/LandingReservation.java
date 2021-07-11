@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -30,6 +32,7 @@ import com.app.events.activities.admin.Navigation;
 import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
+import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.utils.Helper;
 
@@ -47,7 +50,10 @@ public class LandingReservation extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private JSONArray allList,searchList;
+    private String data_response_type;
+    private TextView business_heading_title;
     private ViewEventsAdapter adapter;
+    private ViewBusinessAdapter businessAdapter;
     Toolbar toolbar;
 
     @Override
@@ -63,6 +69,7 @@ public class LandingReservation extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_events);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        business_heading_title = findViewById(R.id.business_heading_title);
         loadEvents();
     }
     void initDefaultDummyData(){
@@ -97,11 +104,20 @@ public class LandingReservation extends AppCompatActivity {
                         Log.d("Logresp",response);
                         try{
                             JSONObject object = new JSONObject(response);
+                            data_response_type = object.getString("type");
                             JSONArray arr = object.getJSONArray("data");
                             allList = arr;
                             searchList = arr;
-                            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
-                            recyclerView.setAdapter(adapter);
+                            if(data_response_type.equals("events")) {
+                                adapter = new ViewEventsAdapter(getApplicationContext(), searchList);
+                                recyclerView.setAdapter(adapter);
+                                business_heading_title.setVisibility(View.GONE);
+                            }else if(data_response_type.equals("businesses")){
+                                business_heading_title.setVisibility(View.VISIBLE);
+                                businessAdapter = new ViewBusinessAdapter(getApplicationContext(), searchList);
+                                recyclerView.setAdapter(businessAdapter);
+
+                            }
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -133,6 +149,11 @@ public class LandingReservation extends AppCompatActivity {
 
 // add it to the RequestQueue
         queue.add(getRequest);
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadEvents();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,17 +205,28 @@ public class LandingReservation extends AppCompatActivity {
         for(int i = 0;i<allList.length();i++){
             try{
                 JSONObject obj = allList.getJSONObject(i);
-                if(obj.getString("event_name").toLowerCase().contains(keyword.toLowerCase()) || obj.getString("event_type").toLowerCase().contains(keyword.toLowerCase())){
-                    searchList.put(obj);
+                if(data_response_type.equals("events")) {
+                    if (obj.getString("event_name").toLowerCase().contains(keyword.toLowerCase()) || obj.getString("event_type").toLowerCase().contains(keyword.toLowerCase())) {
+                        searchList.put(obj);
+                    }
+                }else if(data_response_type.equals("businesses")){
+                    if (obj.getString("name").toLowerCase().contains(keyword.toLowerCase()) || obj.getString("event_type").toLowerCase().contains(keyword.toLowerCase())) {
+                        searchList.put(obj);
+                    }
                 }
             }catch (JSONException ex){
 
             }
         }
         if(searchList.length()>0){
-            Log.d("SearchQy",keyword+"++++\n"+searchList.toString());
-            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
-            recyclerView.setAdapter(adapter);
+//            Log.d("SearchQy",keyword+"++++\n"+searchList.toString());
+            if(data_response_type.equals("events")) {
+                adapter = new ViewEventsAdapter(getApplicationContext(), searchList);
+                recyclerView.setAdapter(adapter);
+            }else if(data_response_type.equals("businesses")){
+                businessAdapter = new ViewBusinessAdapter(getApplicationContext(), searchList);
+                recyclerView.setAdapter(businessAdapter);
+            }
 //            adapter.notifyDataSetChanged();
 //            recyclerView.refreshDrawableState();
         }

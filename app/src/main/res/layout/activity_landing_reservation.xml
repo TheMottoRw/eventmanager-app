@@ -19,10 +19,25 @@
         android:id="@+id/rltvLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/business_heading_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:background="@drawable/recyclerview"
+            android:padding="10dp"
+            android:textColor="@color/red_btn_bg_color"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:text="No events found,below are businesses that can create them"
+            android:visibility="visible"
+            />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_events"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_below="@id/business_heading_title"/>
 
     </RelativeLayout>
 </LinearLayout>
