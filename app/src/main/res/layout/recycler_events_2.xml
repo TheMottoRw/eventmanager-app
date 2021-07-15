@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/recyclerview"
+    android:padding="12dp"
+    android:layout_margin="0dp"
+    android:id="@+id/lnyLayout">
+
+    <ImageView
+        android:id="@+id/imgBanners"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/eventId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="7dp">
+                <TextView
+                    android:id="@+id/eventName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="Event planner: KayKen"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/colorPrimary"/>
+
+                <TextView
+                    android:id="@+id/eventBriefDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Are you attending:"
+                    android:textSize="13sp"
+                    android:layout_marginTop="0dp"
+                    android:layout_below="@id/eventName"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/eventLiner"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:paddingLeft="3dp"
+                    android:layout_below="@id/eventBriefDetails"
+                    android:background="@drawable/line"/>
+                <TextView
+                    android:id="@+id/eventSeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Seat:  2021-09-11 12:00"
+                    android:textSize="11sp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_below="@id/eventLiner"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="@drawable/highlight"
+                    android:visibility="gone"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/eventLiner"
+                    android:background="@drawable/highlight"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="5dp">
+                <TextView
+                    android:id="@+id/eventStartIcon"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/ic_baseline_access_time_24_blue"
+                    android:drawablePadding="1dp"
+                    android:visibility="visible"
+                    android:layout_below="@id/eventLiner"
+                    android:layout_marginTop="4dp"
+                    />
+                <TextView
+                    android:id="@+id/eventStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:text="Start: 2021-09-11 12:00"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_below="@id/eventLiner"
+                    android:layout_toRightOf="@+id/eventStartIcon"/>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/eventType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event name: Partying"
+            android:layout_gravity="center_horizontal"
+            android:textSize="12sp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/eventName"
+            android:visibility="gone"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/location"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/recyclerview_item"
+                        android:text="Location"
+                        android:layout_rowWeight="1"/>
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/recyclerview_item"
+                        android:text="Date"/>
+                </TableRow>
+                <TableRow>
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/singleEventHolder1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/eventPreparedBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xxx"
+            android:textSize="10sp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_below="@id/eventSeat"
+            android:textStyle="italic"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/eventEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End:  2021-09-11 12:00"
+            android:textSize="12sp"
+            android:paddingLeft="0dp"
+            android:layout_marginLeft="0dp"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lnyApprovalLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/btnApprove"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="@string/approve"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@drawable/round_buttons_blue"
+            android:layout_marginLeft="50dp"/>
+        <Button
+            android:id="@+id/btnReject"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textSize="12sp"
+            android:text="@string/reject"
+            android:textColor="@color/white"
+            android:background="@drawable/round_buttons_red"
+            android:layout_gravity="right"
+            android:layout_marginLeft="50dp"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/lnyRescheduleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/btnReschedule"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="@string/reschedule"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:background="@drawable/round_buttons_blue"
+            android:layout_marginLeft="50dp"/>
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:textSize="12sp"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:background="@drawable/round_buttons_red"
+            android:layout_gravity="right"
+            android:layout_marginLeft="50dp"/>
+    </LinearLayout>
+</LinearLayout>

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
                                                                                              int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_events_1, parent, false);
+                .inflate(R.layout.recycler_events_2, parent, false);
         com.app.events.adapters.business.ViewEventsAdapter.MyViewHolder vh = new com.app.events.adapters.business.ViewEventsAdapter.MyViewHolder(v);
         return vh;
     }
@@ -105,6 +106,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
             }
             if(helper.hasSession()){
                 if(helper.getDataValue("user_type").equals("Admin")){
+                    Log.d("Parsed","Id "+currentObj.getString("status"));
                     if(currentObj.getString("status").equals("pending")) {
                             holder.lnyApprovalLayout.setVisibility(View.VISIBLE);
 
@@ -146,6 +148,49 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
                 }else{
                     holder.lnyApprovalLayout.setVisibility(View.GONE);
                 }
+                if(helper.getDataValue("user_type").equals("Business")){//for business to reschedule or cancel events
+                    if(currentObj.getString("business_id").equals(helper.getDataValue("id"))) {
+                        holder.lnyRescheduleLayout.setVisibility(View.VISIBLE);
+
+                        //Listen to approve and reject
+                        holder.btnReschedule.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+//                            approve funct
+                                Intent intent = new Intent(ctx, ConfirmEventAction.class);
+                                intent.putExtra("action", "reschedule");
+                                intent.putExtra("status", "approved");
+                                try {
+                                    intent.putExtra("id", currentObj.getString("id"));
+                                    intent.putExtra("event_name", currentObj.getString("event_name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                ctx.startActivity(intent);
+                            }
+                        });
+                        holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(ctx, ConfirmEventAction.class);
+                                intent.putExtra("action", "cancel");
+                                intent.putExtra("status", "cancelled");
+                                try {
+                                    intent.putExtra("id", currentObj.getString("id"));
+                                    intent.putExtra("event_name", currentObj.getString("event_name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                ctx.startActivity(intent);
+                            }
+                        });
+                    }
+                }else{
+                    holder.lnyRescheduleLayout.setVisibility(View.GONE);
+                }
+
             }
 
             holder.lnlayout.setOnClickListener(new View.OnClickListener() {
@@ -200,13 +245,14 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
         // each data item is just a string in this case
         public TextView eventId,eventName,eventType,briefDetails,eventStart,eventEnd,availableSeat,eventPreparedBy;
         public ImageView imgBanners;
-        public LinearLayout lnlayout,lnyApprovalLayout;
-        public Button btnApprove,btnReject;
+        public LinearLayout lnlayout,lnyApprovalLayout,lnyRescheduleLayout;
+        public Button btnApprove,btnReject,btnReschedule,btnCancel;
 
         public MyViewHolder(LinearLayout lny) {
             super(lny);
             lnlayout = lny.findViewById(R.id.lnyLayout);
             lnyApprovalLayout = lny.findViewById(R.id.lnyApprovalLayout);
+            lnyRescheduleLayout = lny.findViewById(R.id.lnyRescheduleLayout);
             eventId = lny.findViewById(R.id.eventId);
             imgBanners = lny.findViewById(R.id.imgBanners);
             eventName = lny.findViewById(R.id.eventName);
@@ -218,6 +264,8 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
             eventPreparedBy = lny.findViewById(R.id.eventPreparedBy);
             btnApprove = lny.findViewById(R.id.btnApprove);
             btnReject = lny.findViewById(R.id.btnReject);
+            btnReschedule = lny.findViewById(R.id.btnReschedule);
+            btnCancel = lny.findViewById(R.id.btnCancel);
             //tvMsg = lny.findViewById(R.id.tvRecyclerDate);
         }
     }

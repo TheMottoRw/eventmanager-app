@@ -49,6 +49,8 @@
     <string name="reject">Reject</string>
     <string name="approve">Approve</string>
     <string name="cancel">Cancel</string>
+    <string name="reschedule">Reschedule</string>
+    <string name="back">Back</string>
 
 <!--    Validation -->
     <string name="invalid_email">Invalid email address</string>

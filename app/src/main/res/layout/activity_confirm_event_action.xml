@@ -1,9 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.admin.ConfirmEventAction">
+    tools:context=".activities.admin.ConfirmEventAction"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/lnyRescheduleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingRight="20dp"
+        android:paddingLeft="30dp">
+        <TextView
+            android:id="@+id/btnKickOff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/label"
+            android:text="@string/event_kickoff"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btnKickOffDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kickoffdate"
+                style="@style/buttons"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="12dp"
+                android:drawableStart="@drawable/ic_baseline_calendar_today_24"
+                android:drawablePadding="10dp"/>
+            <Button
+                android:id="@+id/btnKickOffTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kickofftime"
+                style="@style/buttons"
+                android:layout_marginLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="12dp"
+                android:drawableStart="@drawable/ic_baseline_access_time_24"
+                android:drawablePadding="10dp"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnKickOn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/event_kickon"
+            style="@style/label"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnCloseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/closedate"
+                style="@style/buttons"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="12dp"
+                android:drawableStart="@drawable/ic_baseline_calendar_today_24"
+                android:drawablePadding="10dp"
+                />
+            <Button
+                android:id="@+id/btnCloseTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/closetime"
+                style="@style/buttons"
+                android:layout_marginLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:textSize="12dp"
+                android:drawableStart="@drawable/ic_baseline_access_time_filled_24"
+                android:drawablePadding="10dp"
+                />
+        </LinearLayout>
+        <Button
+            android:id="@+id/btnReschedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reschedule"
+            style="@style/buttons"
+            android:visibility="visible"
+            android:drawableEnd="@drawable/ic_baseline_done_outline_24"
+            android:paddingRight="15dp"
+            />
+    </LinearLayout>
+</LinearLayout>

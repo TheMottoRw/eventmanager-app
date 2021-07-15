@@ -35,6 +35,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -69,7 +70,8 @@ import java.util.Objects;
 
 public class AddEvent extends AppCompatActivity {
     private EditText edtEventName,edtEventType,edtEventBriefDescription,edtReservationAllowed,edtFullAgenda,edtAddress;
-    private Button btnKickOffDate,btnKickOffTime,btnKickOnDate,btnKickOnTime,btnBanners,btnCreate;
+    private Button btnKickOffDate,btnKickOffTime,btnKickOnDate,btnKickOnTime,btnBanners,btnNext,btnBack,btnCreate;
+    private LinearLayout lnyEventInfo,lnyEventImages;
     private ProgressDialog pgdialog;
     private Helper helper;
     private SwAlertHelper swHelper;
@@ -126,7 +128,9 @@ public class AddEvent extends AppCompatActivity {
         edtAddress = findViewById(R.id.edtAddress);
         btnBanners = findViewById(R.id.btnBanners);
         gvGallery = findViewById(R.id.grdView);
+        lnyEventInfo = findViewById(R.id.lnyEventInfo);
         btnCreate = findViewById(R.id.btnNext);
+
 
         btnBanners.setOnClickListener(new View.OnClickListener() {
             @Override
