@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class BusinessSignup extends Activity {
     private EditText edtBusinessName,edtBusinessType,edtBusinessTin,edtPhone,edtAddress,edtPassword,edtConfirmPassword;
     private Button btnSignup;
+    private Spinner spnBusinessType;
     private ProgressDialog pgdialog;
     private Helper helper;
     private SwAlertHelper swHelper;
@@ -55,7 +57,7 @@ public class BusinessSignup extends Activity {
 
     public void initDefault(){
         edtBusinessName = findViewById(R.id.edtBusinessName);
-        edtBusinessType = findViewById(R.id.edtBusinessType);
+        spnBusinessType = findViewById(R.id.spnBusinessType);
         edtBusinessTin = findViewById(R.id.edtBusinessTin);
         edtPhone = findViewById(R.id.edtPhone);
         edtAddress = findViewById(R.id.edtAddress);
@@ -74,7 +76,7 @@ public class BusinessSignup extends Activity {
     void validateSignup(){
         String phone = edtPhone.getText().toString().trim(),
                 names = edtBusinessName.getText().toString().trim(),
-                type = edtBusinessType.getText().toString().trim(),
+                type = spnBusinessType.getSelectedItem().toString().trim(),
                 tin = edtBusinessTin.getText().toString().trim(),
                 address = edtAddress.getText().toString().trim(),
                 password = edtPassword.getText().toString(),
@@ -139,7 +141,7 @@ public class BusinessSignup extends Activity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("name", edtBusinessName.getText().toString().trim());
-                params.put("business_type",edtBusinessType.getText().toString().trim());
+                params.put("business_type",spnBusinessType.getSelectedItem().toString().trim());
                 params.put("tin", edtBusinessTin.getText().toString().trim());
                 params.put("phone", edtPhone.getText().toString().trim());
                 params.put("address", edtAddress.getText().toString().trim());

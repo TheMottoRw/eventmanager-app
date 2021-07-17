@@ -68,11 +68,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/business_type"
                     style="@style/label"/>
-                <EditText
-                    android:id="@+id/edtBusinessType"
+                <Spinner
+                    android:id="@+id/spnBusinessType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/inputtext"
+                    android:entries="@array/business_types"
                     />
                 <TextView
                     android:id="@+id/tvTin"

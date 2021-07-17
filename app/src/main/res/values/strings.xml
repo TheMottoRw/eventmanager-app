@@ -62,4 +62,24 @@
     <string name="nonempty_credentials">Phone number and password should not be empty</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="business_types">
+        <item>Aerospace</item>
+        <item>Transport</item>
+        <item>Computer related</item>
+        <item>Telecommunication</item>
+        <item>Agriculture</item>
+        <item>Construction</item>
+        <item>Education</item>
+        <item>Pharmaceutical</item>
+        <item>Food related</item>
+        <item>Health care</item>
+        <item>Hospital</item>
+        <item>Entertainment</item>
+        <item>News Media</item>
+        <item>Energy related</item>
+        <item>Manufacturing</item>
+        <item>Music</item>
+        <item>Mining</item>
+        <item>Electronics</item>
+    </string-array>
 </resources>
