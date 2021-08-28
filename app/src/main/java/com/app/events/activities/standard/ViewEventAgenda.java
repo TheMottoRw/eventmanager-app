@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,8 @@ import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.utils.Helper;
 import com.app.events.utils.SwAlertHelper;
 import com.bumptech.glide.Glide;
+import com.willy.ratingbar.BaseRatingBar;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,9 +41,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class ViewEventAgenda extends AppCompatActivity {
     public TextView eventName,eventType,eventKickOff,eventKickOn,eventBriefDetails,fullDescriptionAgenda,eventPreparedBy,availableSeat;
-    public Button arrowBack;
+    public Button arrowBack,btnAddToWatchLater,btnSendReview;
     public ImageView imgBanners;
     public Button btnReserve;
     public Helper helper;
@@ -48,6 +53,8 @@ public class ViewEventAgenda extends AppCompatActivity {
     public String event_id,business_id;
     public ProgressDialog pgdialog;
     private Toolbar toolbar;
+    public EditText edtReview;
+    public float rate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +80,22 @@ public class ViewEventAgenda extends AppCompatActivity {
         fullDescriptionAgenda = findViewById(R.id.eventFullDescriptionAgenda);
         eventPreparedBy = findViewById(R.id.eventPreparedBy);
         availableSeat = findViewById(R.id.eventAvailableSeat);
+        edtReview = findViewById(R.id.edtReview);
         btnReserve = findViewById(R.id.btnReserve);
+        btnAddToWatchLater = findViewById(R.id.btnAddToWatchLater);
+        btnSendReview = findViewById(R.id.btnSendReview);
+        btnSendReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendReview();
+            }
+        });
+        btnAddToWatchLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alert();
+            }
+        });
         arrowBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,7 +156,162 @@ public class ViewEventAgenda extends AppCompatActivity {
             }
         });
 
+        initStar();
     }
+    public void initStar(){
+        ScaleRatingBar ratingBar = new ScaleRatingBar(this);
+        ratingBar.setNumStars(5);
+        ratingBar.setMinimumStars(1);
+        ratingBar.setRating(3);
+        ratingBar.setStarPadding(10);
+        ratingBar.setStepSize(0.5f);
+        ratingBar.setStarWidth(105);
+        ratingBar.setStarHeight(105);
+        ratingBar.setIsIndicator(false);
+        ratingBar.setClickable(true);
+        ratingBar.setScrollable(true);
+        ratingBar.setClearRatingEnabled(true);
+        ratingBar.setEmptyDrawableRes(R.drawable.ic_baseline_star_24);
+        ratingBar.setFilledDrawableRes(R.drawable.ic_baseline_star_border_24);
+
+        ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
+            @Override
+            public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
+                rate = rating;
+                Log.e("RateChange", "onRatingChange: " + rating);
+
+            }
+        });
+    }
+    void alert(){
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE);
+        pDialog.setTitleText(getString(R.string.takeaction));
+            pDialog.setContentText("Confirm adding this event  to your list "+eventName.getText().toString());
+
+        pDialog.setConfirmText("Confirm").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {//send request to approve/reject event
+                sweetAlertDialog.dismiss();
+                saveForLater();
+            }
+        });
+        pDialog.setCancelText("Cancel").setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                sweetAlertDialog.dismiss();
+                finish();
+            }
+        });
+        pDialog.show();
+    }
+    void saveForLater(){
+        final String url = helper.host+"/saveforlater/";
+        pgdialog.show();
+        Log.d("URL",url);
+//        tvLoggingIn.setVisibility(View.VISIBLE);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+// prepare the Request
+        StringRequest getRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // display response
+                        pgdialog.dismiss();
+                        Log.d("Logresp",response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            helper.showToast(object.getString("message"));
+                            finish();
+                        }catch (JSONException ex){
+                            helper.showToast("Json error "+ex.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pgdialog.dismiss();
+                        helper.showToast("Something went wrong");
+                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("cate", "load");
+                params.put("user_id", helper.getDataValue("id"));
+                params.put("event_id", event_id);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", helper.getDataValue("appid"));//put your token here
+                return headers;
+            }
+        };;
+
+// add it to the RequestQueue
+        queue.add(getRequest);
+    }
+    void sendReview(){
+        final String url = helper.host+"/review/";
+        pgdialog.show();
+        Log.d("URL",url);
+//        tvLoggingIn.setVisibility(View.VISIBLE);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+// prepare the Request
+        StringRequest getRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // display response
+                        pgdialog.dismiss();
+                        Log.d("Logresp",response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            helper.showToast(object.getString("message"));
+                            finish();
+                        }catch (JSONException ex){
+                            helper.showToast("Json error "+ex.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pgdialog.dismiss();
+                        helper.showToast("Something went wrong");
+                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("cate", "load");
+                params.put("user_id", helper.getDataValue("id"));
+                params.put("event_id", event_id);
+                params.put("rate", String.valueOf(rate));
+                params.put("review", edtReview.getText().toString());
+                params.put("image", "");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", helper.getDataValue("appid"));//put your token here
+                return headers;
+            }
+        };;
+
+// add it to the RequestQueue
+        queue.add(getRequest);
+    }
+
     public void reserveSeat() {
         final String url = helper.host+"/reservation/";
         pgdialog.show();

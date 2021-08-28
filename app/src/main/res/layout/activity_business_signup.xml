@@ -142,6 +142,21 @@
                     style="@style/inputtext"
                     />
                 <Button
+                    android:id="@+id/btnLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location"
+                    style="@style/buttons"
+                    />
+                <EditText
+                    android:id="@+id/edtLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    style="@style/inputtext"
+                    android:visibility="gone"
+                    />
+                <Button
                     android:id="@+id/btnSignup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

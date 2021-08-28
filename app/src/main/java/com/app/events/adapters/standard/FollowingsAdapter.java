@@ -1,4 +1,4 @@
-package com.app.events.adapters.admin;
+package com.app.events.adapters.standard;
 
 
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.events.R;
-import com.app.events.activities.standard.ConfirmBusinessFollowing;
 import com.app.events.utils.Helper;
 
 import org.json.JSONArray;
@@ -25,7 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapter.MyViewHolder> {
+public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.MyViewHolder> {
     public LinearLayout v;
     public Context ctx;
     public Helper helper;
@@ -33,7 +31,7 @@ public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapte
     private JSONArray mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ViewBusinessAdapter(Context context, JSONArray myDataset) {
+    public FollowingsAdapter(Context context, JSONArray myDataset) {
         mDataset = myDataset;
         ctx = context;
         helper = new Helper(ctx);
@@ -41,8 +39,8 @@ public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapte
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ViewBusinessAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+    public FollowingsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                               int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_business_1, parent, false);
@@ -60,26 +58,8 @@ public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapte
             JSONObject currentObj = mDataset.getJSONObject(position);
             //Toast.makeText(ctx,currentObj.getString("cat_name")+"-"+currentObj.getString("cat_id"),Toast.LENGTH_SHORT).show();
             holder.businessId.setText(currentObj.getString("id"));
-            holder.businessName.setText(currentObj.getString("name"));
+            holder.businessName.setText(currentObj.getString("business_name"));
             holder.businessType.setText(currentObj.getString("business_type"));
-            holder.businessTin.setText(ctx.getString(R.string.business_tin)+": "+ currentObj.getString("tin"));
-            holder.businessContact.setText(currentObj.getString("contact_number"));
-            holder.businessAddress.setText(currentObj.getString("address"));
-            holder.btnFollow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(ctx, ConfirmBusinessFollowing.class);
-                    try {
-                        intent.putExtra("business_id",currentObj.getString("id"));
-                        intent.putExtra("business_name",currentObj.getString("name"));
-                        intent.putExtra("business_type",currentObj.getString("business_type"));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        ctx.startActivity(new Intent(intent));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
             //set image icons
 
 
@@ -100,10 +80,9 @@ public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapte
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView businessId,businessName,businessType,businessTin,businessAddress,businessContact;
+        public TextView businessId,businessName,businessType;
         public ImageView imgCategoryIcon;
         public LinearLayout lnlayout;
-        public Button btnFollow;
 
         public MyViewHolder(LinearLayout lny) {
             super(lny);
@@ -111,11 +90,7 @@ public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapte
             businessId = lny.findViewById(R.id.businessId);
             businessName = lny.findViewById(R.id.businessName);
             businessType = lny.findViewById(R.id.businessType);
-            businessTin = lny.findViewById(R.id.businessTin);
-            businessContact = lny.findViewById(R.id.businessContact);
-            businessAddress = lny.findViewById(R.id.businessAddress);
-            btnFollow = lny.findViewById(R.id.btnFollow);
-            //tvMsg = lny.findViewById(R.id.tvRecyclerDate);
+
         }
     }
 }

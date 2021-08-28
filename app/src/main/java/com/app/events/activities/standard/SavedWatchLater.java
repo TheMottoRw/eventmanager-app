@@ -1,15 +1,11 @@
 package com.app.events.activities.standard;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.assist.AssistStructure;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,67 +25,46 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.Navigation;
-import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
+import com.app.events.adapters.standard.SavedWatchLaterAdapter;
 import com.app.events.utils.Helper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LandingReservation extends AppCompatActivity {
+public class SavedWatchLater extends AppCompatActivity {
     public Helper helper;
     public ProgressDialog pgdialog;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private JSONArray allList,searchList;
-    private String data_response_type;
-    private TextView business_heading_title;
-    private ViewEventsAdapter adapter;
-    private ViewBusinessAdapter businessAdapter;
     Toolbar toolbar;
+    private TextView headingTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing_reservation);
+        setContentView(R.layout.activity_saved_watch_later);
         helper = new Helper(this);
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - Event");
+        toolbar.setTitle(getString(R.string.app_name)+" - Saved events");
         setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.recycler_events);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        business_heading_title = findViewById(R.id.business_heading_title);
-        loadEvents();
+        headingTitle = findViewById(R.id.heading_title);
+        loadSavedWatchLater();
     }
-    void initDefaultDummyData(){
-        String jsonArr = "[{id:12,event_name:'Partying the show',event_type:Networking,event_kikoff:'2021-06-30 12:30',event_close:'2021-06-30 17:30',brief_description:'Network with startup founders',reservation_allowed:30,available_seat:18,banners:''" +
-                "},{id:12,event_name:'Cyber security forums for engineers',event_type:'Skillup and data management',event_kikoff:'2021-06-30 12:30',event_close:'2021-06-30 17:30',brief_description:'Cyber hacking intro to cyber enthusiast in the field',reservation_allowed:30,available_seat:20,banners:''"+//\" +\n" +
-                "},{id:12,event_name:'Bruce melody album lunch',event_type:'Entertainment',event_kikoff:'2021-07-10 12:30',event_close:'2021-07-10 17:30',brief_description:'Melody will be performing in front of executive leaders ',reservation_allowed:30,available_seat:10,banners:''}]";//\" +\n" +
-//                "},{id:12,event_name:'President inauguration',event_type:'Inauguration for the elected president',event_kikoff:'2021-07-28 12:30',event_close:'2021-07-28 17:30',brief_description:'Will be broadcasted on TV Rwanda Broadcasting agency',banners:''}]";
-        try {
-            JSONArray arr = new JSONArray(jsonArr);
-            allList = arr;
-            searchList = arr;
-            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
-            recyclerView.setAdapter(adapter);
-        }catch (JSONException ex){
-            Log.d("jsonerr"," Json data error: "+ex.getMessage());
-        }
-
-        }
-    void loadEvents(){
-        final String url = helper.host+"/events/active";
+    void loadSavedWatchLater(){
+        final String url = helper.host+"/saveforlater/load";
         Log.d("URL",url);
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
@@ -104,20 +79,13 @@ public class LandingReservation extends AppCompatActivity {
                         Log.d("Logresp",response);
                         try{
                             JSONObject object = new JSONObject(response);
-                            data_response_type = object.getString("type");
-                            JSONArray arr = object.getJSONArray("data");
-                            allList = arr;
-                            searchList = arr;
-                            if(data_response_type.equals("events")) {
-                                adapter = new ViewEventsAdapter(getApplicationContext(), searchList);
-                                recyclerView.setAdapter(adapter);
-                                business_heading_title.setVisibility(View.GONE);
-                            }else if(data_response_type.equals("businesses")){
-                                business_heading_title.setVisibility(View.VISIBLE);
-                                businessAdapter = new ViewBusinessAdapter(getApplicationContext(), searchList);
-                                recyclerView.setAdapter(businessAdapter);
 
-                            }
+                            JSONArray arr = object.getJSONArray("data");
+                            if(arr.length()>0) headingTitle.setVisibility(View.GONE);
+                            else headingTitle.setVisibility(View.VISIBLE);
+
+                            SavedWatchLaterAdapter adapter = new SavedWatchLaterAdapter(getApplicationContext(), arr);
+                                recyclerView.setAdapter(adapter);
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -136,6 +104,7 @@ public class LandingReservation extends AppCompatActivity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "load");
+                params.put("user_id", helper.getDataValue("id"));
                 return params;
             }
 
@@ -150,11 +119,7 @@ public class LandingReservation extends AppCompatActivity {
 // add it to the RequestQueue
         queue.add(getRequest);
     }
-    @Override
-    public void onResume(){
-        super.onResume();
-        loadEvents();
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -172,68 +137,13 @@ public class LandingReservation extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.signin,menu);
         }
 
-        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
-
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
-             /*   if(list.contains(query)){
-                    adapter.getFilter().filter(query);
-                }else{
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }*/
-                return false;
-
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                searchInEvents(newText);
-                return false;
-            }
-        });
-
-
         return true;
     }
-    void searchInEvents(String keyword){
-        searchList = new JSONArray();
 
-        for(int i = 0;i<allList.length();i++){
-            try{
-                JSONObject obj = allList.getJSONObject(i);
-                if(data_response_type.equals("events")) {
-                    if (obj.getString("event_name").toLowerCase().contains(keyword.toLowerCase()) || obj.getString("event_type").toLowerCase().contains(keyword.toLowerCase())) {
-                        searchList.put(obj);
-                    }
-                }else if(data_response_type.equals("businesses")){
-                    if (obj.getString("name").toLowerCase().contains(keyword.toLowerCase()) || obj.getString("event_type").toLowerCase().contains(keyword.toLowerCase())) {
-                        searchList.put(obj);
-                    }
-                }
-            }catch (JSONException ex){
-
-            }
-        }
-        if(searchList.length()>0){
-//            Log.d("SearchQy",keyword+"++++\n"+searchList.toString());
-            if(data_response_type.equals("events")) {
-                adapter = new ViewEventsAdapter(getApplicationContext(), searchList);
-                recyclerView.setAdapter(adapter);
-            }else if(data_response_type.equals("businesses")){
-                businessAdapter = new ViewBusinessAdapter(getApplicationContext(), searchList);
-                recyclerView.setAdapter(businessAdapter);
-            }
-//            adapter.notifyDataSetChanged();
-//            recyclerView.refreshDrawableState();
-        }
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Toast.makeText(getApplicationContext(),"Clicked standard user",Toast.LENGTH_LONG).show();
 
         switch (helper.getDataValue("user_type")){
             case "Standard":
@@ -248,25 +158,20 @@ public class LandingReservation extends AppCompatActivity {
                     this.startActivity(intent1);
                     return true;
                 }
+
                 if (id == R.id.business) {
                     Intent intent1 = new Intent(this,EventOriganizers.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
-
-                if (id == R.id.watch_later) {
-                    Intent intent1 = new Intent(this,SavedWatchLater.class);
                     this.startActivity(intent1);
                     return true;
                 }
                 break;
             case "Business":
                 if (id == R.id.events) {
-                Intent intent1 = new Intent(this, ViewEvents.class);
-                this.startActivity(intent1);
-                return true;
-            }
-            break;
+                    Intent intent1 = new Intent(this, ViewEvents.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+                break;
             case "Admin":
                 if (id == R.id.business) {
                     Intent intent1 = new Intent(this, Navigation.class);
@@ -279,16 +184,14 @@ public class LandingReservation extends AppCompatActivity {
         if(id == R.id.logout){
             helper.logout();
             finish();
-            startActivity(new Intent(LandingReservation.this, Signin.class));
+            startActivity(new Intent(SavedWatchLater.this, Signin.class));
         }
         if(id == R.id.signin){
             finish();
-            startActivity(new Intent(LandingReservation.this, Signin.class));
+            startActivity(new Intent(SavedWatchLater.this, Signin.class));
         }
 
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

@@ -13,6 +13,16 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_event_24"/>
     <item
+        android:id="@+id/followers"
+        android:title="Followers"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_branding_watermark_24"/>
+      <item
+        android:id="@+id/watch_later"
+        android:title="Downloads"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_branding_watermark_24"/>
+    <item
         android:id="@+id/logout"
         android:title="Logout"
         app:showAsAction="always"

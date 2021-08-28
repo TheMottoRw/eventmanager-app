@@ -13,9 +13,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -42,6 +44,7 @@ public class BusinessSignup extends Activity {
     private Helper helper;
     private SwAlertHelper swHelper;
     private Validator validator;
+    private Button btnLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,7 @@ public class BusinessSignup extends Activity {
         edtAddress = findViewById(R.id.edtAddress);
         edtPassword = findViewById(R.id.edtPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        btnLocation = findViewById(R.id.btnLocation);
         btnSignup = findViewById(R.id.btnSignup);
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +160,9 @@ public class BusinessSignup extends Activity {
                 return headers;
             }
         };;
-
+        int socketTimeout = 60000;//60 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        getRequest.setRetryPolicy(policy);
 // add it to the RequestQueue
         queue.add(getRequest);
     }

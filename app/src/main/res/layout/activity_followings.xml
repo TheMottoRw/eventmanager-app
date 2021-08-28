@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.standard.Followings"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/white"
+        android:background="@color/colorPrimary"
+        app:title="@string/app_name"/>
+    <RelativeLayout
+        android:id="@+id/rltvLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/heading_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:background="@drawable/recyclerview"
+        android:padding="10dp"
+        android:textColor="@color/red_btn_bg_color"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:text="No events found,below are businesses that can create them"
+        android:visibility="visible"
+        />
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerviewFollowings"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/heading_title"/>
+    </RelativeLayout>
+</LinearLayout>

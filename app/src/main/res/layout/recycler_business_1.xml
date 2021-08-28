@@ -27,24 +27,42 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
                 android:paddingBottom="3dp">
-            <TextView
-                android:id="@+id/businessIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_business_24"
-                android:layout_marginTop="5dp"/>
-            <TextView
-                android:id="@+id/businessName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:text="KayKen"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:layout_toRightOf="@+id/businessIcon"
-                android:layout_marginLeft="5dp"/>
 
+                <TextView
+                    android:id="@+id/businessIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawableStart="@drawable/ic_baseline_business_24" />
+
+                <TextView
+                    android:id="@+id/businessName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/businessIcon"
+                    android:text="KayKen"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/btnFollow"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/buttons"
+                    android:text="Follow"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="15dp"
+                    android:paddingLeft="15dp"
+                    android:textSize="10sp"
+                    android:layout_alignParentRight="true"
+                    android:drawableStart="@drawable/ic_baseline_add_circle_outline_24"
+                    android:drawablePadding="5dp"/>
             <TextView
                 android:id="@+id/businessType"
                 android:layout_width="wrap_content"

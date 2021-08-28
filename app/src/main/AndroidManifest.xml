@@ -16,7 +16,22 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activities.admin.ConfirmEventAction"></activity>
+        <activity
+            android:name=".activities.standard.EventOriganizers"
+            android:exported="true" />
+        <activity
+            android:name=".activities.standard.SavedWatchLater"
+            android:exported="true" />
+        <activity
+            android:name=".activities.standard.Followings"
+            android:exported="true" />
+        <activity
+            android:name=".activities.standard.ConfirmWatchLater"
+            android:exported="true" />
+        <activity
+            android:name=".activities.standard.ConfirmBusinessFollowing"
+            android:exported="true" />
+        <activity android:name=".activities.admin.ConfirmEventAction" />
         <activity android:name=".activities.admin.Navigation" />
         <activity android:name=".activities.standard.Signup" />
         <activity android:name=".activities.standard.ViewEventAgenda" />
