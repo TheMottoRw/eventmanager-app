@@ -236,6 +236,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/create"
                     style="@style/buttons"
+                    android:visibility="gone"
                     />
             </LinearLayout>
             <LinearLayout

@@ -93,7 +93,7 @@ public class AddEvent extends AppCompatActivity {
     private GridView gvGallery;
     private GalleryAdapter galleryAdapter;
     List path = new ArrayList();
-    private String encodedImage, encodedImage1, encodeImage2;
+    private String encodedImage="", encodedImage1="", encodeImage2="";
     private static int STORAGE_PERMISSION_CODE = 1001;
 
     /*end image uploading variables*/
@@ -229,9 +229,11 @@ public class AddEvent extends AppCompatActivity {
 
         if(eventName.isEmpty() || eventType.isEmpty() || brief.isEmpty() || seat.isEmpty() || address.isEmpty() || kikoffdate.equals(getString(R.string.kickoffdate)) || kikofftime.equals(getString(R.string.kickofftime))){
             swHelper.failed(getString(R.string.all_field_and_time_required));
-        }else if(path.size()<3){
-            swHelper.failed(getString(R.string._3_images_required));
-            } else{
+        }
+//        else if(path.size()<3){
+//            swHelper.failed(getString(R.string._3_images_required));
+//            }
+        else{
                 triggerSaveWithImageUpload();
             }
 
@@ -437,17 +439,17 @@ public class AddEvent extends AppCompatActivity {
             protected void onPostExecute(String msg) {
                 pgdialog.dismiss();
                 //Toast.makeText(AddEvent.this,"Image decoded", Toast.LENGTH_SHORT).show();
-                if (path.size() !=3){
-                    AlertDialog alert = new AlertDialog.Builder(AddEvent.this).create();
-                    alert.setMessage("You must select 3 images which describe your product");
-                    alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.show();
-                }
+//asua make_file_optional                if (path.size() !=3){
+//                    AlertDialog alert = new AlertDialog.Builder(AddEvent.this).create();
+//                    alert.setMessage("You must select 3 images which describe your product");
+//                    alert.setButton(DialogInterface.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    alert.show();
+//                }
             }
         }.execute(null, null, null);
     }

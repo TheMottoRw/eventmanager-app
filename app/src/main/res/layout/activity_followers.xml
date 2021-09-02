@@ -26,15 +26,16 @@
             android:background="@drawable/recyclerview"
             android:gravity="center_horizontal"
             android:padding="10dp"
-            android:text="None of the business of you follow"
+            android:text="No followers found"
             android:textColor="@color/red_btn_bg_color"
             android:textSize="13sp"
             android:textStyle="bold"
             android:visibility="visible" />
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerviewFollowings"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/heading_title"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewFollowers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/heading_title" />
     </RelativeLayout>
 </LinearLayout>

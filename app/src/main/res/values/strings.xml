@@ -63,6 +63,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="location">My GPS Location</string>
+    <string name="notification_broadcast">Send notifications updates to all your followers</string>
+    <string name="message">Message</string>
+    <string name="forgot_password">Forgot password ?</string>
     <string-array name="business_types">
         <item>Aerospace</item>
         <item>Transport</item>

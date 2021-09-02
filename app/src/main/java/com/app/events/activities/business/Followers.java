@@ -1,7 +1,9 @@
-package com.app.events.activities.standard;
+package com.app.events.activities.business;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -25,11 +26,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.Navigation;
-import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
+import com.app.events.activities.standard.EventOriganizers;
+import com.app.events.activities.standard.Followings;
+import com.app.events.activities.standard.LandingReservation;
+import com.app.events.activities.standard.SavedWatchLater;
+import com.app.events.activities.standard.ViewMyReservations;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
+import com.app.events.adapters.business.FollowersAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
-import com.app.events.adapters.standard.SavedWatchLaterAdapter;
+import com.app.events.adapters.standard.FollowingsAdapter;
 import com.app.events.utils.Helper;
 
 import org.json.JSONArray;
@@ -39,37 +45,33 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SavedWatchLater extends AppCompatActivity {
-    public Helper helper;
-    public ProgressDialog pgdialog;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    Toolbar toolbar;
+public class Followers extends AppCompatActivity {
+    private Helper helper;
+    private ProgressDialog pgdialog;
+    private RecyclerView recyclerviewFollowings;
+    private LinearLayoutManager layoutManager;
     private TextView headingTitle;
-
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saved_watch_later);
+        setContentView(R.layout.activity_followers);
+
         helper = new Helper(this);
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - Saved events");
+        toolbar.setTitle(getString(R.string.app_name)+" - Followers");
         setSupportActionBar(toolbar);
-        recyclerView = findViewById(R.id.recycler_events);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+
         headingTitle = findViewById(R.id.heading_title);
-        loadSavedWatchLater();
+        recyclerviewFollowings = findViewById(R.id.recyclerviewFollowers);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerviewFollowings.setLayoutManager(layoutManager);
+        loadFollowers();
     }
-    @Override
-    protected void onResume(){
-        super.onResume();
-        loadSavedWatchLater();
-    }
-    void loadSavedWatchLater(){
-        final String url = helper.host+"/saveforlater/load";
+    void  loadFollowers(){
+        final String url = helper.host+"/follow/load?business_id="+helper.getDataValue("id");
         Log.d("URL",url);
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
@@ -84,13 +86,11 @@ public class SavedWatchLater extends AppCompatActivity {
                         Log.d("Logresp",response);
                         try{
                             JSONObject object = new JSONObject(response);
-
                             JSONArray arr = object.getJSONArray("data");
+                            FollowersAdapter adapter = new FollowersAdapter(getApplicationContext(), arr);
                             if(arr.length()>0) headingTitle.setVisibility(View.GONE);
                             else headingTitle.setVisibility(View.VISIBLE);
-
-                            SavedWatchLaterAdapter adapter = new SavedWatchLaterAdapter(getApplicationContext(), arr);
-                                recyclerView.setAdapter(adapter);
+                            recyclerviewFollowings.setAdapter(adapter);
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -109,7 +109,7 @@ public class SavedWatchLater extends AppCompatActivity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "load");
-                params.put("user_id", helper.getDataValue("id"));
+                params.put("", helper.getDataValue("id"));
                 return params;
             }
 
@@ -124,62 +124,36 @@ public class SavedWatchLater extends AppCompatActivity {
 // add it to the RequestQueue
         queue.add(getRequest);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         if(helper.hasSession()) {
             MenuInflater inflater = getMenuInflater();
-            if(helper.getDataValue("user_type").equals("Standard")) {
-                inflater.inflate(R.menu.standard, menu);
-            }else if(helper.getDataValue("user_type").equals("Business")){
                 inflater.inflate(R.menu.business,menu);
-            }else if(helper.getDataValue("user_type").equals("Admin")){
-                inflater.inflate(R.menu.admin,menu);
-            }
         }else{
             getMenuInflater().inflate(R.menu.signin,menu);
         }
 
+
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Toast.makeText(getApplicationContext(),"Clicked standard user",Toast.LENGTH_LONG).show();
 
         switch (helper.getDataValue("user_type")){
-            case "Standard":
-                if (id == R.id.my_reservation) {
-                    Intent intent1 = new Intent(this,ViewMyReservations.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
 
-                if (id == R.id.followings) {
-                    Intent intent1 = new Intent(this,Followings.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
-
-                if (id == R.id.business) {
-                    Intent intent1 = new Intent(this,EventOriganizers.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
-                break;
             case "Business":
                 if (id == R.id.events) {
+                    finish();
                     Intent intent1 = new Intent(this, ViewEvents.class);
                     this.startActivity(intent1);
                     return true;
                 }
-                break;
-            case "Admin":
-                if (id == R.id.business) {
-                    Intent intent1 = new Intent(this, Navigation.class);
+                if (id == R.id.notifications) {
+                    finish();
+                    Intent intent1 = new Intent(this, Notifications.class);
                     this.startActivity(intent1);
                     return true;
                 }
@@ -189,11 +163,7 @@ public class SavedWatchLater extends AppCompatActivity {
         if(id == R.id.logout){
             helper.logout();
             finish();
-            startActivity(new Intent(SavedWatchLater.this, Signin.class));
-        }
-        if(id == R.id.signin){
-            finish();
-            startActivity(new Intent(SavedWatchLater.this, Signin.class));
+            startActivity(new Intent(Followers.this, Signin.class));
         }
 
 

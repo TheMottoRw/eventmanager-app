@@ -30,6 +30,8 @@ import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.Navigation;
 import com.app.events.activities.admin.ViewBusiness;
+import com.app.events.activities.business.Followers;
+import com.app.events.activities.business.Notifications;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
@@ -64,7 +66,7 @@ public class LandingReservation extends AppCompatActivity {
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - Event");
+        toolbar.setTitle(getString(R.string.app_name)+" - Upcoming Event");
         setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.recycler_events);
         layoutManager = new LinearLayoutManager(this);
@@ -266,6 +268,18 @@ public class LandingReservation extends AppCompatActivity {
                 this.startActivity(intent1);
                 return true;
             }
+
+                if (id == R.id.followers) {
+                    Intent intent1 = new Intent(this, Followers.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+
+                if (id == R.id.notifications) {
+                    Intent intent1 = new Intent(this, Notifications.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
             break;
             case "Admin":
                 if (id == R.id.business) {

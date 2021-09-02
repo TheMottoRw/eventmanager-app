@@ -2,6 +2,7 @@ package com.app.events.activities.standard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,7 @@ public class Followings extends AppCompatActivity {
     private RecyclerView recyclerviewFollowings;
     private LinearLayoutManager layoutManager;
     private TextView headingTitle;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,10 @@ public class Followings extends AppCompatActivity {
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
 
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.app_name)+" - Followers");
+        setSupportActionBar(toolbar);
+
         headingTitle = findViewById(R.id.heading_title);
         recyclerviewFollowings = findViewById(R.id.recyclerviewFollowings);
         layoutManager = new LinearLayoutManager(this);
@@ -63,7 +69,7 @@ public class Followings extends AppCompatActivity {
         loadFollowings();
     }
     void loadFollowings(){
-        final String url = helper.host+"/follow/load";
+        final String url = helper.host+"/follow/load?user_id="+helper.getDataValue("id");
         Log.d("URL",url);
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
@@ -101,7 +107,6 @@ public class Followings extends AppCompatActivity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "load");
-                params.put("user_id", helper.getDataValue("id"));
                 return params;
             }
 

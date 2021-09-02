@@ -56,7 +56,7 @@ public class ViewEvents extends AppCompatActivity {
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - Event");
+        toolbar.setTitle(getString(R.string.app_name)+" - My Events");
         setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.recycler_events);
         layoutManager = new LinearLayoutManager(this);
@@ -156,7 +156,12 @@ public class ViewEvents extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        if (id == R.id.followers) {
+            startActivity(new Intent(ViewEvents.this, Followers.class));
+        }
+        if (id == R.id.notifications) {
+            startActivity(new Intent(ViewEvents.this, Notifications.class));
+        }
         if (id == R.id.logout) {
             helper.logout();
             finish();

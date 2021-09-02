@@ -4,7 +4,7 @@
     <item
         android:id="@+id/app_bar_search"
         android:title="Search"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_baseline_search_24"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <item
@@ -17,14 +17,19 @@
         android:title="Followers"
         app:showAsAction="never"
         android:icon="@drawable/ic_baseline_branding_watermark_24"/>
-      <item
-        android:id="@+id/watch_later"
-        android:title="Downloads"
+    <item
+        android:id="@+id/notifications"
+        android:title="Notifications"
         app:showAsAction="never"
         android:icon="@drawable/ic_baseline_branding_watermark_24"/>
+<!--      <item-->
+<!--        android:id="@+id/watch_later"-->
+<!--        android:title="Downloads"-->
+<!--        app:showAsAction="never"-->
+<!--        android:icon="@drawable/ic_baseline_branding_watermark_24"/>-->
     <item
         android:id="@+id/logout"
         android:title="Logout"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_power_settings_new_24"/>
 </menu>

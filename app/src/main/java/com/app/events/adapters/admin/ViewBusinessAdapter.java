@@ -70,6 +70,7 @@ public class ViewBusinessAdapter extends RecyclerView.Adapter<ViewBusinessAdapte
                 public void onClick(View view) {
                     Intent intent = new Intent(ctx, ConfirmBusinessFollowing.class);
                     try {
+                        intent.putExtra("action","follow");
                         intent.putExtra("business_id",currentObj.getString("id"));
                         intent.putExtra("business_name",currentObj.getString("name"));
                         intent.putExtra("business_type",currentObj.getString("business_type"));

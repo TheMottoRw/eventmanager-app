@@ -54,21 +54,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            android:text="Event: Nelson"
+            android:text=""
             android:textSize="10sp"/>
         <TextView
             android:id="@+id/eventStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            android:text="Start: 2021-09-11 12:00"
+            android:text=""
             android:textSize="10sp"/>
 
         <TextView
             android:id="@+id/eventEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="End:  2021-09-11 12:00"
+            android:text=""
             android:textSize="10sp"
             android:paddingLeft="0dp"
             android:layout_marginLeft="0dp"/>
@@ -81,7 +81,7 @@
             android:id="@+id/eventReservedOn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Reserved on:"
+            android:text=""
             android:textSize="11sp"/>
     </LinearLayout>
 </LinearLayout>

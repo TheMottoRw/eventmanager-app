@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.events.R;
 import com.app.events.activities.admin.ConfirmEventAction;
 import com.app.events.activities.business.ViewReservations;
+import com.app.events.activities.standard.ConfirmWatchLater;
 import com.app.events.activities.standard.ViewEventAgenda;
 import com.app.events.utils.Helper;
 import com.bumptech.glide.Glide;
@@ -59,7 +60,7 @@ public class SavedWatchLaterAdapter extends RecyclerView.Adapter<SavedWatchLater
                                                                                               int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_events_2, parent, false);
+                .inflate(R.layout.recycler_watch_later, parent, false);
         SavedWatchLaterAdapter.MyViewHolder vh = new SavedWatchLaterAdapter.MyViewHolder(v);
         return vh;
     }
@@ -222,6 +223,20 @@ public class SavedWatchLaterAdapter extends RecyclerView.Adapter<SavedWatchLater
                     }
                 }
             });
+            holder.btnRemoveFromWatchLater.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Intent intent = new Intent(ctx, ConfirmWatchLater.class);
+                        intent.putExtra("id", currentObj.getString("id"));
+                        intent.putExtra("event_name", currentObj.getString("event_name"));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctx.startActivity(intent);
+                    }catch (JSONException ex){
+                        Log.d("jsonerr","Error "+ex.getMessage());
+                    }
+                }
+            });
 
 
         } catch (JSONException ex) {
@@ -246,7 +261,7 @@ public class SavedWatchLaterAdapter extends RecyclerView.Adapter<SavedWatchLater
         public TextView eventId,eventName,eventType,briefDetails,eventStart,eventEnd,availableSeat,eventPreparedBy;
         public ImageView imgBanners;
         public LinearLayout lnlayout,lnyApprovalLayout,lnyRescheduleLayout;
-        public Button btnApprove,btnReject,btnReschedule,btnCancel;
+        public Button btnApprove,btnReject,btnReschedule,btnCancel,btnRemoveFromWatchLater;
 
         public MyViewHolder(LinearLayout lny) {
             super(lny);
@@ -266,6 +281,7 @@ public class SavedWatchLaterAdapter extends RecyclerView.Adapter<SavedWatchLater
             btnReject = lny.findViewById(R.id.btnReject);
             btnReschedule = lny.findViewById(R.id.btnReschedule);
             btnCancel = lny.findViewById(R.id.btnCancel);
+            btnRemoveFromWatchLater = lny.findViewById(R.id.btnRemoveFromWatchLater);
             //tvMsg = lny.findViewById(R.id.tvRecyclerDate);
         }
     }

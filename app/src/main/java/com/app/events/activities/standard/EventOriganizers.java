@@ -73,8 +73,8 @@ public class EventOriganizers extends AppCompatActivity {
                             JSONObject object = new JSONObject(response);
                             JSONArray arr = object.getJSONArray("data");
                             if(arr.length()>0)
-                                heading_title.setVisibility(View.VISIBLE);
-                            else heading_title.setVisibility(View.GONE);
+                                heading_title.setVisibility(View.GONE);
+                            else heading_title.setVisibility(View.VISIBLE);
                             ViewBusinessAdapter businessAdapter = new ViewBusinessAdapter(getApplicationContext(), arr);
                                 recyclerView.setAdapter(businessAdapter);
                         }catch (JSONException ex){
@@ -95,6 +95,7 @@ public class EventOriganizers extends AppCompatActivity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "load");
+                params.put("user_id", helper.getDataValue("id"));
                 return params;
             }
 

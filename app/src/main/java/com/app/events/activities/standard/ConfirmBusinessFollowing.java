@@ -53,7 +53,9 @@ public class ConfirmBusinessFollowing extends AppCompatActivity {
             @Override
             public void onClick(SweetAlertDialog sweetAlertDialog) {//send request to approve/reject event
                 sweetAlertDialog.dismiss();
-                followBusiness();
+                if(getIntent().getStringExtra("action").equals("follow"))
+                    followBusiness();
+                else unfollowBusiness(getIntent().getStringExtra("id"));
             }
         });
         pDialog.setCancelText("Cancel").setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -66,7 +68,7 @@ public class ConfirmBusinessFollowing extends AppCompatActivity {
         pDialog.show();
     }
     void followBusiness(){
-        final String url = helper.host+"/follow/";
+        final String url = helper.host+"/"+(getIntent().getStringExtra("action").equals("follow")?"follow/":"follow/unfollow");
         pgdialog.show();
         Log.d("URL",url);
 //        tvLoggingIn.setVisibility(View.VISIBLE);
@@ -113,6 +115,56 @@ public class ConfirmBusinessFollowing extends AppCompatActivity {
                 return headers;
             }
         };;
+
+// add it to the RequestQueue
+        queue.add(getRequest);
+    }
+    void unfollowBusiness(String id){
+        final String url = helper.host+"/follow/unfollow/"+id;
+        pgdialog.show();
+        Log.d("URL",url);
+//        tvLoggingIn.setVisibility(View.VISIBLE);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+// prepare the Request
+        StringRequest getRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // display response
+                        pgdialog.dismiss();
+                        Log.d("Logresp",response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            helper.showToast(object.getString("message"));
+                            finish();
+                        }catch (JSONException ex){
+                            helper.showToast("Json error "+ex.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pgdialog.dismiss();
+                        helper.showToast("Something went wrong");
+                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("cate", "load");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", helper.getDataValue("appid"));//put your token here
+                return headers;
+            }
+        };
 
 // add it to the RequestQueue
         queue.add(getRequest);

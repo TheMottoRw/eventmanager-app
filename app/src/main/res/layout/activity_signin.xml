@@ -74,7 +74,14 @@
                     style="@style/inputtext"
                     android:drawableStart="@drawable/ic_baseline_lock_24"
                     />
-
+                <TextView
+                    android:id="@+id/tvForgotPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password"
+                    style="@style/label"
+                    android:textColor="@color/red_btn_bg_color"
+                    android:paddingRight="15dp"/>
                 <TextView
                     android:id="@+id/tvSignupStandard"
                     android:layout_width="match_parent"

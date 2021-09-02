@@ -1,4 +1,4 @@
-package com.app.events.activities.standard;
+package com.app.events.activities.business;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +26,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
-import com.app.events.activities.admin.Navigation;
-import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
-import com.app.events.adapters.admin.ViewBusinessAdapter;
-import com.app.events.adapters.business.ViewEventsAdapter;
-import com.app.events.adapters.standard.SavedWatchLaterAdapter;
+import com.app.events.adapters.business.FollowersAdapter;
 import com.app.events.utils.Helper;
 
 import org.json.JSONArray;
@@ -39,43 +37,43 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SavedWatchLater extends AppCompatActivity {
-    public Helper helper;
-    public ProgressDialog pgdialog;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    Toolbar toolbar;
+public class Notifications extends AppCompatActivity {
+    private Helper helper;
+    private ProgressDialog pgdialog;
+    private RecyclerView recyclerviewFollowings;
+    private LinearLayoutManager layoutManager;
     private TextView headingTitle;
-
+    private Toolbar toolbar;
+    private EditText edtMessage;
+    private Button btnSend;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_saved_watch_later);
+        setContentView(R.layout.activity_notifications);
+
         helper = new Helper(this);
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - Saved events");
+        toolbar.setTitle(getString(R.string.app_name)+" - Notifications");
         setSupportActionBar(toolbar);
-        recyclerView = findViewById(R.id.recycler_events);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        headingTitle = findViewById(R.id.heading_title);
-        loadSavedWatchLater();
+        edtMessage = findViewById(R.id.edtMessage);
+        btnSend = findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendNotifications();
+            }
+        });
     }
-    @Override
-    protected void onResume(){
-        super.onResume();
-        loadSavedWatchLater();
-    }
-    void loadSavedWatchLater(){
-        final String url = helper.host+"/saveforlater/load";
+    void  sendNotifications(){
+        final String url = helper.host+"/events/notifications";
         Log.d("URL",url);
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 // prepare the Request
-        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest getRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -84,13 +82,9 @@ public class SavedWatchLater extends AppCompatActivity {
                         Log.d("Logresp",response);
                         try{
                             JSONObject object = new JSONObject(response);
-
-                            JSONArray arr = object.getJSONArray("data");
-                            if(arr.length()>0) headingTitle.setVisibility(View.GONE);
-                            else headingTitle.setVisibility(View.VISIBLE);
-
-                            SavedWatchLaterAdapter adapter = new SavedWatchLaterAdapter(getApplicationContext(), arr);
-                                recyclerView.setAdapter(adapter);
+                          if(object.getString("status").equals("ok")){
+                              Toast.makeText(getApplicationContext(),"Your message broadcasted successful",Toast.LENGTH_LONG).show();
+                          }
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -100,7 +94,7 @@ public class SavedWatchLater extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pgdialog.dismiss();
-                        helper.showToast("Something went wrong");
+                        helper.showToast("Notification broadcasted to your followers successful");
                         Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
                     }
                 }
@@ -109,7 +103,8 @@ public class SavedWatchLater extends AppCompatActivity {
             public Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "load");
-                params.put("user_id", helper.getDataValue("id"));
+                params.put("business_id", helper.getDataValue("id"));
+                params.put("message", edtMessage.getText().toString().trim());
                 return params;
             }
 
@@ -124,62 +119,36 @@ public class SavedWatchLater extends AppCompatActivity {
 // add it to the RequestQueue
         queue.add(getRequest);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         if(helper.hasSession()) {
             MenuInflater inflater = getMenuInflater();
-            if(helper.getDataValue("user_type").equals("Standard")) {
-                inflater.inflate(R.menu.standard, menu);
-            }else if(helper.getDataValue("user_type").equals("Business")){
-                inflater.inflate(R.menu.business,menu);
-            }else if(helper.getDataValue("user_type").equals("Admin")){
-                inflater.inflate(R.menu.admin,menu);
-            }
+            inflater.inflate(R.menu.business,menu);
         }else{
             getMenuInflater().inflate(R.menu.signin,menu);
         }
 
+
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Toast.makeText(getApplicationContext(),"Clicked standard user",Toast.LENGTH_LONG).show();
 
         switch (helper.getDataValue("user_type")){
-            case "Standard":
-                if (id == R.id.my_reservation) {
-                    Intent intent1 = new Intent(this,ViewMyReservations.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
 
-                if (id == R.id.followings) {
-                    Intent intent1 = new Intent(this,Followings.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
-
-                if (id == R.id.business) {
-                    Intent intent1 = new Intent(this,EventOriganizers.class);
-                    this.startActivity(intent1);
-                    return true;
-                }
-                break;
             case "Business":
                 if (id == R.id.events) {
+                    finish();
                     Intent intent1 = new Intent(this, ViewEvents.class);
                     this.startActivity(intent1);
                     return true;
                 }
-                break;
-            case "Admin":
-                if (id == R.id.business) {
-                    Intent intent1 = new Intent(this, Navigation.class);
+                if (id == R.id.followers) {
+                    finish();
+                    Intent intent1 = new Intent(this, Followers.class);
                     this.startActivity(intent1);
                     return true;
                 }
@@ -189,14 +158,8 @@ public class SavedWatchLater extends AppCompatActivity {
         if(id == R.id.logout){
             helper.logout();
             finish();
-            startActivity(new Intent(SavedWatchLater.this, Signin.class));
+            startActivity(new Intent(Notifications.this, Signin.class));
         }
-        if(id == R.id.signin){
-            finish();
-            startActivity(new Intent(SavedWatchLater.this, Signin.class));
-        }
-
-
         return super.onOptionsItemSelected(item);
     }
 }

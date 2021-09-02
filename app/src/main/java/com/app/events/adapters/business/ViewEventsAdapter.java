@@ -77,7 +77,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
             holder.eventName.setText(currentObj.getString("event_name"));
             holder.eventType.setText(ctx.getString(R.string.event_type)+": "+ currentObj.getString("event_type"));
             SimpleDateFormat sda = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            SimpleDateFormat sdf = new SimpleDateFormat("E,MMM dd . hh:mm a");
+            SimpleDateFormat sdf = new SimpleDateFormat("E,MMM dd yyyy . hh:mm a");
             holder.eventStart.setText(sdf.format(sda.parse(currentObj.getString("event_kikoff"))));
             holder.briefDetails.setText(currentObj.getString("brief_description"));
             holder.eventEnd.setText(ctx.getString(R.string.event_kickon)+": "+ currentObj.getString("event_close"));
@@ -94,7 +94,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<com.app.events.adapt
             holder.eventPreparedBy.setText(ctx.getString(R.string.preparedBy)+": "+ currentObj.getString("business_name"));
             //set image icons
             String images = currentObj.getString("images");
-            if(!images.isEmpty()){
+            if(!images.isEmpty() && !images.equals(",,")){
                 String[] imagesArr = images.split(",");
                 Glide.with(ctx).load(imagesArr[0])
                         .error(ctx.getDrawable(R.drawable.logo))

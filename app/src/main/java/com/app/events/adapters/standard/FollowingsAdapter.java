@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.events.R;
+import com.app.events.activities.standard.ConfirmBusinessFollowing;
 import com.app.events.utils.Helper;
 
 import org.json.JSONArray;
@@ -43,7 +45,7 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.My
                                                                int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_business_1, parent, false);
+                .inflate(R.layout.recycler_followings, parent, false);
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
@@ -61,6 +63,24 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.My
             holder.businessName.setText(currentObj.getString("business_name"));
             holder.businessType.setText(currentObj.getString("business_type"));
             //set image icons
+            holder.btnUnfollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ctx, ConfirmBusinessFollowing.class);
+                    try {
+                        Log.d("ButtonClick","Clicked "+currentObj.getString("id"));
+                        intent.putExtra("action","unfollow");
+                        intent.putExtra("id",currentObj.getString("id"));
+                        intent.putExtra("business_name",currentObj.getString("business_name"));
+                        intent.putExtra("business_type",currentObj.getString("business_type"));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ctx.startActivity(new Intent(intent));
+                    } catch (JSONException e) {
+                        Log.d("jsonerr","Error "+e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            });
 
 
         } catch (JSONException ex) {
@@ -83,13 +103,16 @@ public class FollowingsAdapter extends RecyclerView.Adapter<FollowingsAdapter.My
         public TextView businessId,businessName,businessType;
         public ImageView imgCategoryIcon;
         public LinearLayout lnlayout;
+        public Button btnUnfollow;
 
         public MyViewHolder(LinearLayout lny) {
             super(lny);
+
             lnlayout = lny.findViewById(R.id.singleBusinessHolder);
             businessId = lny.findViewById(R.id.businessId);
             businessName = lny.findViewById(R.id.businessName);
             businessType = lny.findViewById(R.id.businessType);
+            btnUnfollow = lny.findViewById(R.id.btnUnFollow);
 
         }
     }

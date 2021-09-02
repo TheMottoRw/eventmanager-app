@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -46,6 +48,7 @@ public class ViewReservations extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private TextView tvEventName,tvKickoffDate;
     private Toolbar toolbar;
+    private RelativeLayout rtvReservationHeader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,7 @@ public class ViewReservations extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         tvEventName = findViewById(R.id.eventName);
         tvKickoffDate = findViewById(R.id.eventStart);
+        rtvReservationHeader = findViewById(R.id.rtvReservationHeader);
         loadEventsReservation();
     }
     void loadEventsReservation(){
@@ -92,6 +96,8 @@ public class ViewReservations extends AppCompatActivity {
 
                                     tvEventName.setText(arr.getJSONObject(0).getString("event_name"));
                                     tvKickoffDate.setText(sdf.format(sda.parse(arr.getJSONObject(0).getString("event_kikoff"))));
+                                }else{
+                                    rtvReservationHeader.setVisibility(View.GONE);
                                 }
                                 ViewReservationsAdapter adapter = new ViewReservationsAdapter(getApplicationContext(), arr);
                                 recyclerView.setAdapter(adapter);

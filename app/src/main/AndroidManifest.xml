@@ -17,6 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
         <activity
+            android:name=".activities.business.Notifications"
+            android:exported="true" />
+        <activity
+            android:name=".activities.business.Followers"
+            android:exported="true" />
+        <activity
             android:name=".activities.standard.EventOriganizers"
             android:exported="true" />
         <activity

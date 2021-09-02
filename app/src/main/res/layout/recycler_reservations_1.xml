@@ -29,17 +29,18 @@
                 android:background="@drawable/ic_baseline_account_box_24"
                 android:layout_marginTop="7dp"
                 />
+
             <TextView
                 android:id="@+id/reserverName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:text="Reserved by: Nelson"
-                android:textSize="14sp"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/reservationUserIcon"
-                android:layout_marginLeft="10dp"/>
+                android:text="Reserved by: Nelson"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/reserverPhone"
@@ -83,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                android:text="Event: Nelson"
+                android:text=""
                 android:textSize="12sp"
                 android:layout_toRightOf="@id/reservationEventIcon"
                 android:layout_marginLeft="5dp"/>
@@ -92,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                android:text="Start: 2021-09-11 12:00"
+                android:text=""
                 android:textSize="10sp"
                 android:textStyle="bold"
                 android:layout_toRightOf="@id/reservationEventIcon"
@@ -111,8 +112,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-
 
         <TextView
             android:id="@+id/eventEnd"
