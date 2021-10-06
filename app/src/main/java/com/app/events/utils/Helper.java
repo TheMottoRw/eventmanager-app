@@ -13,6 +13,7 @@ import android.widget.Toast;
 public class Helper {
     public String host = "";
     public Context ctx;
+    public static String API_KEY = "AIzaSyCoi2dyuerfdG6lv_cdVJAfdEKAW62ml28";
     public Helper(Context context){
         ctx = context;
         host = getHost();

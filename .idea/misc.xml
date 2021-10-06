@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_baseline_add_circle_outline_24.xml" value="0.3546875" />
+        <entry key="app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.20185185185185187" />
         <entry key="app/src/main/res/drawable/ic_baseline_remove_circle_outline_24.xml" value="0.3148148148148148" />
         <entry key="app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.3546875" />
+        <entry key="app/src/main/res/drawable/ic_location_on_white.xml" value="0.32685185185185184" />
         <entry key="app/src/main/res/layout/activity_add_event.xml" value="0.1646403242147923" />
         <entry key="app/src/main/res/layout/activity_business_signup.xml" value="0.1646403242147923" />
         <entry key="app/src/main/res/layout/activity_confirm_business_following.xml" value="0.15833333333333333" />
@@ -14,6 +16,7 @@
         <entry key="app/src/main/res/layout/activity_followers.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_followings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_landing_reservation.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_locate_businesses.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_notifications.xml" value="0.14" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.2552083333333333" />
         <entry key="app/src/main/res/layout/activity_reset_password.xml" value="0.22" />

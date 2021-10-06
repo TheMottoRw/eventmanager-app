@@ -67,6 +67,7 @@ public class BusinessSignup extends Activity {
     private Button btnLocation;
     private TextView showLocation;
     private FusedLocationProviderClient mFusedLocationClient;
+    public String latitude = "",longitude = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +77,8 @@ public class BusinessSignup extends Activity {
         validator = new Validator();
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.senddata));
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         initDefault();
     }
@@ -179,6 +182,7 @@ public class BusinessSignup extends Activity {
                 params.put("tin", edtBusinessTin.getText().toString().trim());
                 params.put("phone", edtPhone.getText().toString().trim());
                 params.put("address", edtAddress.getText().toString().trim());
+                params.put("gps_location", latitude+","+longitude);
                 params.put("password", edtPassword.getText().toString().trim());
                 return params;
             }
@@ -218,6 +222,9 @@ public class BusinessSignup extends Activity {
                         if (location == null) {
                             requestNewLocationData();
                         } else {
+                            latitude = String.valueOf(location.getLatitude());
+                            longitude = String.valueOf(location.getLongitude());
+                            helper.showToast("Location found");
                             showLocation.setText("Latitude "+location.getLatitude() + " Longitude "+ location.getLongitude() + "");
                         }
                     }
@@ -256,6 +263,9 @@ public class BusinessSignup extends Activity {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
+            latitude = String.valueOf(mLastLocation.getLatitude());
+            longitude = String.valueOf(mLastLocation.getLongitude());
+            helper.showToast("Location found");
             showLocation.setText("Latitude:" + mLastLocation.getLatitude() + ", Longitude:" + mLastLocation.getLongitude() + "");
         }
     };

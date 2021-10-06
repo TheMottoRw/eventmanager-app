@@ -262,6 +262,11 @@ public class LandingReservation extends AppCompatActivity {
                     this.startActivity(intent1);
                     return true;
                 }
+                if (id == R.id.locate_businesses) {
+                    Intent intent1 = new Intent(this,LocateBusinesses.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
                 break;
             case "Business":
                 if (id == R.id.events) {
@@ -305,6 +310,12 @@ public class LandingReservation extends AppCompatActivity {
         if(id == R.id.signin){
             finish();
             startActivity(new Intent(LandingReservation.this, Signin.class));
+        }
+
+        if (id == R.id.locate_businesses) {
+            Intent intent1 = new Intent(this,LocateBusinesses.class);
+            this.startActivity(intent1);
+            return true;
         }
 
 

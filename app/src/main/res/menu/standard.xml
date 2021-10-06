@@ -28,6 +28,11 @@
         app:showAsAction="never"
         android:icon="@drawable/ic_baseline_branding_watermark_24"/>
     <item
+        android:id="@+id/locate_businesses"
+        android:title="Locate organizers"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_branding_watermark_24"/>
+    <item
         android:id="@+id/profile"
         android:title="Profile"
         app:showAsAction="never"

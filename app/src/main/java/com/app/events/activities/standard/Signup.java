@@ -1,16 +1,27 @@
 package com.app.events.activities.standard;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -28,6 +39,13 @@ import com.app.events.activities.commons.Signin;
 import com.app.events.utils.Helper;
 import com.app.events.utils.SwAlertHelper;
 import com.app.events.utils.Validator;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +60,9 @@ public class Signup extends Activity {
     private Helper helper;
     private SwAlertHelper swHelper;
     private Validator validator;
+    String latitude,longitude;
+    FusedLocationProviderClient mFusedLocationClient;
+    private static final int REQUEST_LOCATION = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +72,8 @@ public class Signup extends Activity {
         validator = new Validator();
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.senddata));
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         initDefault();
     }
@@ -150,7 +173,7 @@ public class Signup extends Activity {
                 headers.put("Authorization", helper.getDataValue("appid"));//put your token here
                 return headers;
             }
-        };;
+        };
 
         int socketTimeout = 60000;//60 seconds - change to what you want
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
