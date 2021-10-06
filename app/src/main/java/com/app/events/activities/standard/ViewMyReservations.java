@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.business.ViewEvents;
+import com.app.events.activities.commons.Profile;
 import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.utils.Helper;
@@ -125,6 +126,11 @@ public class ViewMyReservations extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.profile) {
+            Intent intent1 = new Intent(this, Profile.class);
+            this.startActivity(intent1);
+            return true;
+        }
         if(id == R.id.logout){
             helper.logout();
             finish();

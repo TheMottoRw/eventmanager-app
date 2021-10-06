@@ -90,7 +90,8 @@ public class ViewBusiness extends AppCompatActivity {
                             ViewBusinessAdapter adapter = new ViewBusinessAdapter(getApplicationContext(), arr);
                             recyclerView.setAdapter(adapter);
                         } catch (JSONException ex) {
-                            helper.showToast("Json error " + ex.getMessage());
+                            Log.d("jsonerr",ex.getMessage());
+//                            helper.showToast("Json error " + ex.getMessage());
                         }
                     }
                 },

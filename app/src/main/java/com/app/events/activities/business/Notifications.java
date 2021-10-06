@@ -83,6 +83,7 @@ public class Notifications extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                           if(object.getString("status").equals("ok")){
+                              edtMessage.setText("");
                               Toast.makeText(getApplicationContext(),"Your message broadcasted successful",Toast.LENGTH_LONG).show();
                           }
                         }catch (JSONException ex){
@@ -94,6 +95,7 @@ public class Notifications extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pgdialog.dismiss();
+                        edtMessage.setText("");
                         helper.showToast("Notification broadcasted to your followers successful");
                         Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
                     }

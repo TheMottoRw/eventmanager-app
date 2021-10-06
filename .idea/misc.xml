@@ -15,12 +15,15 @@
         <entry key="app/src/main/res/layout/activity_followings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_landing_reservation.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_notifications.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.2552083333333333" />
+        <entry key="app/src/main/res/layout/activity_reset_password.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_saved_watch_later.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_signin.xml" value="0.1646403242147923" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.1646403242147923" />
         <entry key="app/src/main/res/layout/activity_view_business.xml" value="0.1646403242147923" />
-        <entry key="app/src/main/res/layout/activity_view_event_agenda.xml" value="0.22735507246376813" />
+        <entry key="app/src/main/res/layout/activity_view_event_agenda.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_view_reservations.xml" value="0.1646403242147923" />
+        <entry key="app/src/main/res/layout/image_slider_layout_item.xml" value="0.1646403242147923" />
         <entry key="app/src/main/res/layout/recycler_business_1.xml" value="0.5" />
         <entry key="app/src/main/res/layout/recycler_events.xml" value="0.1646403242147923" />
         <entry key="app/src/main/res/layout/recycler_events_2.xml" value="0.25" />
@@ -28,7 +31,9 @@
         <entry key="app/src/main/res/layout/recycler_followings.xml" value="0.5" />
         <entry key="app/src/main/res/layout/recycler_reservations.xml" value="0.33" />
         <entry key="app/src/main/res/layout/recycler_reservations_1.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/recycler_review.xml" value="0.18" />
         <entry key="app/src/main/res/layout/recycler_watch_later.xml" value="0.33" />
+        <entry key="app/src/main/res/menu/admin.xml" value="0.21296296296296297" />
         <entry key="app/src/main/res/menu/business.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/menu/signin.xml" value="0.1841025641025641" />
         <entry key="app/src/main/res/menu/standard.xml" value="0.21666666666666667" />

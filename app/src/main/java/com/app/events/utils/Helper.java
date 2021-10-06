@@ -43,9 +43,10 @@ public class Helper {
     public void showToast(String message){
         Toast.makeText(ctx,message,Toast.LENGTH_LONG).show();
     }
-    public void setSession(String sessid,String phone,String email,String category,String created_at){
+    public void setSession(String sessid,String name,String phone,String email,String category,String created_at){
         SharedPreferences.Editor sh = this.getEditor().edit();
         sh.putString("id",sessid);
+        sh.putString("name",name);
         sh.putString("user_type",category);
         sh.putString("phone",phone);
         sh.putString("email",email);

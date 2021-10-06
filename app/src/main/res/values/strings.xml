@@ -22,6 +22,7 @@
     <string name="email">Email</string>
     <string name="signup">Create account</string>
     <string name="create">Create</string>
+    <string name="user_type">User type</string>
 
     <!--    Event strings-->
     <string name="event_header">Create an event</string>
@@ -66,6 +67,13 @@
     <string name="notification_broadcast">Send notifications updates to all your followers</string>
     <string name="message">Message</string>
     <string name="forgot_password">Forgot password ?</string>
+    <string name="title_reset_via_email">Enter your email to reset password</string>
+    <string name="title_reset_verification">Enter code received to your email to change password</string>
+    <string name="title_reset_newpassword">Add your new password</string>
+    <string name="verification_code">Verification code (sent to your email)</string>
+    <string name="verify">Verify</string>
+    <string name="reset">Reset</string>
+    <string name="check">Check</string>
     <string-array name="business_types">
         <item>Aerospace</item>
         <item>Transport</item>

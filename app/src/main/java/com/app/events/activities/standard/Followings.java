@@ -28,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.Navigation;
 import com.app.events.activities.business.ViewEvents;
+import com.app.events.activities.commons.Profile;
 import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
@@ -188,6 +189,11 @@ public class Followings extends AppCompatActivity {
                 }
                 break;
 
+        }
+        if (id == R.id.profile) {
+            Intent intent1 = new Intent(this, Profile.class);
+            this.startActivity(intent1);
+            return true;
         }
         if(id == R.id.logout){
             helper.logout();

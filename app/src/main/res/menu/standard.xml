@@ -28,6 +28,11 @@
         app:showAsAction="never"
         android:icon="@drawable/ic_baseline_branding_watermark_24"/>
     <item
+        android:id="@+id/profile"
+        android:title="Profile"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_branding_watermark_24"/>
+    <item
         android:id="@+id/logout"
         android:title="Logout"
         app:showAsAction="ifRoom"

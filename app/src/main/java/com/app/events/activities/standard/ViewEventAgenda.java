@@ -2,10 +2,13 @@ package com.app.events.activities.standard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,9 +31,14 @@ import com.app.events.activities.business.AddEvent;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.business.ViewEventsAdapter;
+import com.app.events.adapters.commons.ReviewsAdapter;
 import com.app.events.utils.Helper;
 import com.app.events.utils.SwAlertHelper;
-import com.bumptech.glide.Glide;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -38,12 +46,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class ViewEventAgenda extends AppCompatActivity {
+public class ViewEventAgenda extends AppCompatActivity implements BaseSliderView.OnSliderClickListener,
+        ViewPagerEx.OnPageChangeListener{
     public TextView eventName,eventType,eventKickOff,eventKickOn,eventBriefDetails,fullDescriptionAgenda,eventPreparedBy,availableSeat;
     public Button arrowBack,btnAddToWatchLater,btnSendReview;
     public ImageView imgBanners;
@@ -55,6 +67,12 @@ public class ViewEventAgenda extends AppCompatActivity {
     private Toolbar toolbar;
     public EditText edtReview;
     public float rate;
+    SliderLayout sliderLayout ;
+    public RecyclerView recyclerReview;
+    public LinearLayoutManager layoutManager;
+    HashMap<String, String> HashMapForURL = new HashMap<String, String>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,13 +82,100 @@ public class ViewEventAgenda extends AppCompatActivity {
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
         initDefault();
+        loadReview();
+        setupAnimation();
     }
+    void setupAnimation(){
+//        HashMapForURL = new HashMap<String, String>();
+//
+//        HashMapForURL.put("CupCake", "https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+//        HashMapForURL.put("Donut", "https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260");
+//        HashMapForURL.put("Eclair", "https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+//        HashMapForURL.put("Goraw", "https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+//        HashMapForURL.put("Drams", "https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260");
+//        HashMapForURL.put("Man", "https://images.pexels.com/photos/929778/pexels-photo-929778.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+
+
+        for(String name : HashMapForURL.keySet()){
+
+            TextSliderView textSliderView = new TextSliderView(ViewEventAgenda.this);
+
+            textSliderView
+                    .description(name.replace("1","").replace("2",""))
+                    .image(HashMapForURL.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            textSliderView.bundle(new Bundle());
+
+
+            textSliderView.getBundle()
+                    .putString("extra",name);
+
+            sliderLayout.addSlider(textSliderView);
+        }
+        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Stack);//DepthPage
+
+        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+
+        sliderLayout.setCustomAnimation(new DescriptionAnimation());
+
+        sliderLayout.setDuration(3000);
+
+        sliderLayout.addOnPageChangeListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+
+        sliderLayout.stopAutoCycle();
+
+        super.onStop();
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+
+        Toast.makeText(this,slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+    @Override
+    public void onPageSelected(int position) {
+
+        Log.d("Slider Demo", "Page Changed: " + position);
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+
+
+
+    public void AddImageUrlFormLocalRes(){
+        HashMap<String, Integer> HashMapForLocalRes ;
+        HashMapForLocalRes = new HashMap<String, Integer>();
+
+        HashMapForLocalRes.put("CupCake", R.drawable.indicator_corner_bg);
+
+    }
+
     void initDefault(){
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name) + " - Event view" );
         setSupportActionBar(toolbar);
 
         imgBanners = findViewById(R.id.imgBanners);
+        sliderLayout = findViewById(R.id.slider);
+        recyclerReview = findViewById(R.id.recycler_reviews);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerReview.setLayoutManager(layoutManager);
+
         arrowBack = findViewById(R.id.arrowBack);
         eventName = findViewById(R.id.eventName);
         eventType = findViewById(R.id.eventType);
@@ -125,13 +230,21 @@ public class ViewEventAgenda extends AppCompatActivity {
                     availableSeat.setText("Only "+obj.getString("available_seat")+" seat remaining");
                 }
             }
-            if(!obj.getString("images").isEmpty()){
+            if(!obj.getString("images").isEmpty() && !obj.getString("images").equals(",,")){
                 String[] images = obj.getString("images").split(",");
-                Glide.with(getApplicationContext()).load(images[0])
-                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+                Log.d("Images",obj.getString("images"));
+//                Glide.with(getApplicationContext()).load(images[0])
+//                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+                if(!images[0].isEmpty())
+                    HashMapForURL.put(obj.getString("event_name"),images[0]);
+                if(!images[1].isEmpty())
+                    HashMapForURL.put(obj.getString("event_name")+"1",images[1]);
+                if(!images[2].isEmpty())
+                    HashMapForURL.put(obj.getString("event_name")+"2",images[2]);
             }else{
-                Glide.with(getApplicationContext()).load(getDrawable(R.drawable.logo))
-                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+//                Glide.with(getApplicationContext()).load(getDrawable(R.drawable.logo))
+//                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
+
             }
 
         }catch (JSONException ex){
@@ -307,6 +420,58 @@ public class ViewEventAgenda extends AppCompatActivity {
                 return headers;
             }
         };;
+
+// add it to the RequestQueue
+        queue.add(getRequest);
+    }
+
+    void loadReview(){
+        final String url = helper.host+"/review/load?event_id="+event_id;
+        pgdialog.show();
+        Log.d("URL",url);
+//        tvLoggingIn.setVisibility(View.VISIBLE);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+// prepare the Request
+        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // display response
+                        pgdialog.dismiss();
+                        Log.d("Logresp",response);
+                        try{
+                            JSONObject object = new JSONObject(response);
+                            JSONArray arr = object.getJSONArray("data");
+                            ReviewsAdapter adapter = new ReviewsAdapter(getApplicationContext(),arr);
+                            recyclerReview.setAdapter(adapter);
+                        }catch (JSONException ex){
+                            helper.showToast("Json error "+ex.getMessage());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pgdialog.dismiss();
+                        helper.showToast("Something went wrong");
+                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("cate", "load");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", helper.getDataValue("appid"));//put your token here
+                return headers;
+            }
+        };
 
 // add it to the RequestQueue
         queue.add(getRequest);

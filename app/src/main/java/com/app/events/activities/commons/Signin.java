@@ -156,17 +156,17 @@ public class Signin extends Activity {
                                     JSONObject obj = arr.getJSONObject(0);
                                 if(obj.has("user_type")) {
                                     if (obj.getString("user_type").equals("Admin")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
+                                        helper.setSession(obj.getString("id"), obj.getString("name"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
                                         helper.showToast("Login success");
                                         startActivity(new Intent(getApplicationContext(), Navigation.class));
                                     } else if (obj.getString("user_type").equals("Business")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("contact_number"), obj.getString("tin"), obj.getString("user_type"), obj.getString("created_at"));
+                                        helper.setSession(obj.getString("id"), obj.getString("name"), obj.getString("contact_number"), obj.getString("tin"), obj.getString("user_type"), obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
                                         helper.showToast("Login success");
                                         startActivity(new Intent(getApplicationContext(), ViewEvents.class));
                                     } else if (obj.getString("user_type").equals("Standard")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
+                                        helper.setSession(obj.getString("id"),obj.getString("name"),  obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
                                         helper.showToast("Login success");
                                         if (getIntent().hasExtra("action") && getIntent().getStringExtra("action").equals("reservation")) {
