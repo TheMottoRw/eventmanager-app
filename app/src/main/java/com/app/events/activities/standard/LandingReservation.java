@@ -35,8 +35,10 @@ import com.app.events.activities.business.Notifications;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Profile;
 import com.app.events.activities.commons.Signin;
+import com.app.events.activities.commons.SplashAccountActivity;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
+import com.app.events.adapters.business.ViewEventsAdapter3;
 import com.app.events.utils.Helper;
 
 import org.json.JSONArray;
@@ -55,7 +57,7 @@ public class LandingReservation extends AppCompatActivity {
     private JSONArray allList,searchList;
     private String data_response_type;
     private TextView business_heading_title;
-    private ViewEventsAdapter adapter;
+    private ViewEventsAdapter3 adapter;
     private ViewBusinessAdapter businessAdapter;
     Toolbar toolbar;
 
@@ -84,7 +86,7 @@ public class LandingReservation extends AppCompatActivity {
             JSONArray arr = new JSONArray(jsonArr);
             allList = arr;
             searchList = arr;
-            adapter = new ViewEventsAdapter(getApplicationContext(),searchList);
+            adapter = new ViewEventsAdapter3(getApplicationContext(),searchList);
             recyclerView.setAdapter(adapter);
         }catch (JSONException ex){
             Log.d("jsonerr"," Json data error: "+ex.getMessage());
@@ -112,7 +114,7 @@ public class LandingReservation extends AppCompatActivity {
                             allList = arr;
                             searchList = arr;
                             if(data_response_type.equals("events")) {
-                                adapter = new ViewEventsAdapter(getApplicationContext(), searchList);
+                                adapter = new ViewEventsAdapter3(getApplicationContext(), searchList);
                                 recyclerView.setAdapter(adapter);
                                 business_heading_title.setVisibility(View.GONE);
                             }else if(data_response_type.equals("businesses")){
@@ -224,7 +226,7 @@ public class LandingReservation extends AppCompatActivity {
         if(searchList.length()>0){
 //            Log.d("SearchQy",keyword+"++++\n"+searchList.toString());
             if(data_response_type.equals("events")) {
-                adapter = new ViewEventsAdapter(getApplicationContext(), searchList);
+                adapter = new ViewEventsAdapter3(getApplicationContext(), searchList);
                 recyclerView.setAdapter(adapter);
             }else if(data_response_type.equals("businesses")){
                 businessAdapter = new ViewBusinessAdapter(getApplicationContext(), searchList);
@@ -296,7 +298,11 @@ public class LandingReservation extends AppCompatActivity {
                 break;
 
         }
-
+        if (id == R.id.home) {
+            Intent intent1 = new Intent(this, LandingReservation.class);
+            this.startActivity(intent1);
+            return true;
+        }
         if (id == R.id.profile) {
             Intent intent1 = new Intent(this, Profile.class);
             this.startActivity(intent1);
@@ -309,7 +315,7 @@ public class LandingReservation extends AppCompatActivity {
         }
         if(id == R.id.signin){
             finish();
-            startActivity(new Intent(LandingReservation.this, Signin.class));
+            startActivity(new Intent(LandingReservation.this, SplashAccountActivity.class));
         }
 
         if (id == R.id.locate_businesses) {

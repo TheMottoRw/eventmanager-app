@@ -145,18 +145,29 @@ public class Followers extends AppCompatActivity {
         switch (helper.getDataValue("user_type")){
 
             case "Business":
+                if (id == R.id.home) {
+                    Intent intent1 = new Intent(this, LandingReservation.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
                 if (id == R.id.events) {
-                    finish();
                     Intent intent1 = new Intent(this, ViewEvents.class);
                     this.startActivity(intent1);
                     return true;
                 }
+
+
                 if (id == R.id.notifications) {
-                    finish();
                     Intent intent1 = new Intent(this, Notifications.class);
                     this.startActivity(intent1);
                     return true;
                 }
+                if (id == R.id.logout) {
+                    helper.logout();
+                    finish();
+                    startActivity(new Intent(Followers.this, Signin.class));
+                }
+
                 break;
 
         }

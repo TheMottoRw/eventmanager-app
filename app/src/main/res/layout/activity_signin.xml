@@ -7,135 +7,150 @@
     tools:context=".activities.commons.Signin"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp">
+    android:background="@drawable/login_bg">
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/bg_round_top"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
             <TextView
                 android:id="@+id/tvLoading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/loading"
                 android:layout_alignParentTop="true"
-                android:textAlignment="center"
                 android:background="#FFC107"
+                android:text="@string/loading"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/imgLogo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/logo"
-                />
+                android:visibility="gone"/>
+
             <LinearLayout
                 android:id="@+id/lnyLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/imgLogo">
+                android:layout_below="@+id/imgLogo"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvheade"
+                    style="@style/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/signin_header"
-                    style="@style/header"/>
+                    android:text="@string/signin_header" />
+
                 <TextView
                     android:id="@+id/tvPhone"
+                    style="@style/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/phone"
-                    style="@style/label"/>
+                    android:text="@string/phone" />
+
                 <EditText
                     android:id="@+id/edtPhone"
+                    style="@style/inputtext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/inputtext"
-                    android:drawableStart="@drawable/ic_baseline_local_phone_24"
-                    />
+                    android:drawableStart="@drawable/ic_baseline_local_phone_24" />
+
                 <TextView
                     android:id="@+id/tvPassword"
+                    style="@style/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/password"
-                    style="@style/label"/>
+                    android:text="@string/password" />
+
                 <EditText
                     android:id="@+id/edtPassword"
+                    style="@style/inputtext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    style="@style/inputtext"
                     android:drawableStart="@drawable/ic_baseline_lock_24"
-                    />
+                    android:inputType="textPassword" />
+
                 <TextView
                     android:id="@+id/tvForgotPassword"
+                    style="@style/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingRight="15dp"
                     android:text="@string/forgot_password"
-                    style="@style/label"
-                    android:textColor="@color/red_btn_bg_color"
-                    android:paddingRight="15dp"/>
+                    android:textColor="@color/red_btn_bg_color" />
+
                 <TextView
                     android:id="@+id/tvSignupStandard"
+                    style="@style/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup_standard"
-                    style="@style/label"
-                    android:textColor="@color/colorPrimary"
                     android:drawableEnd="@drawable/ic_baseline_account_box_24"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:text="@string/signup_standard"
+                    android:textColor="@color/colorPrimary" />
+
                 <TextView
                     android:id="@+id/tvSignupBusiness"
+                    style="@style/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/signup_business"
-                    style="@style/label"
-                    android:textColor="@color/colorPrimary"
                     android:drawableEnd="@drawable/ic_baseline_business_24"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:text="@string/signup_business"
+                    android:textColor="@color/colorPrimary" />
+
                 <Button
                     android:id="@+id/btnLogin"
+                    style="@style/buttons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/signin"
-                    style="@style/buttons"
-                    android:drawableEnd="@drawable/ic_baseline_login_24"
-                    android:paddingRight="15dp"
-                    />
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginRight="65dp"
+                    android:text="@string/signin" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/lnyHost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_below="@+id/lnyLogin"
+                android:orientation="vertical"
                 android:visibility="gone">
+
                 <TextView
                     android:id="@+id/tvHost"
+                    style="@style/label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SERVER ADDRESS"
-                    style="@style/label"/>
+                    android:text="SERVER ADDRESS" />
+
                 <EditText
                     android:id="@+id/edtHost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     style="@style/inputtext"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <Button
                     android:id="@+id/btnSet"
+                    style="@style/buttons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SET"
-                    style="@style/buttons"
-                    />
+                    android:text="SET" />
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

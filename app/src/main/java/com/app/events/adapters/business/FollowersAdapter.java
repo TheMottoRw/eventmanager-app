@@ -23,7 +23,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class FollowersAdapter extends RecyclerView.Adapter<com.app.events.adapters.business.FollowersAdapter.MyViewHolder> {
+public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.MyViewHolder> {
     public LinearLayout v;
     public Context ctx;
     public Helper helper;
@@ -38,19 +38,19 @@ public class FollowersAdapter extends RecyclerView.Adapter<com.app.events.adapte
 
     // Create new views (invoked by the layout manager)
     @Override
-    public com.app.events.adapters.business.FollowersAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public FollowersAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                                     int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_followers, parent, false);
-        com.app.events.adapters.business.FollowersAdapter.MyViewHolder vh = new com.app.events.adapters.business.FollowersAdapter.MyViewHolder(v);
+        FollowersAdapter.MyViewHolder vh = new FollowersAdapter.MyViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(final com.app.events.adapters.business.FollowersAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final FollowersAdapter.MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         try {

@@ -154,7 +154,7 @@ public class BusinessSignup extends Activity {
                                 if(obj.has("user_type")) {
                                     helper.showToast(object.getString("message"));
                                     if (obj.getString("user_type").equals("Business")) {
-                                        helper.setSession(obj.getString("id"),obj.getString("name"),  obj.getString("contact_number"), obj.getString("tin"), obj.getString("user_type"), obj.getString("created_at"));
+                                        helper.setSession(obj.getString("id"),obj.getString("name"),  obj.getString("contact_number"), obj.getString("tin"), obj.getString("user_type"), obj.getString("address"),obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
                                         startActivity(new Intent(getApplicationContext(), ViewEvents.class));
                                     } else helper.showToast("Wrong username or password");

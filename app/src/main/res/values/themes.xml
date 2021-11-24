@@ -38,7 +38,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
     <style name="inputtext">
-        <item name="android:background">@drawable/input_text</item>
+        <item name="android:background">@drawable/input_text_line</item>
         <item name="android:textSize">18dp</item>
         <item name="android:paddingTop">15dp</item>
         <item name="android:paddingBottom">15dp</item>
@@ -65,12 +65,19 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="buttons">
-        <item name="android:background">@drawable/buttons</item>
+        <item name="android:background">@drawable/button_redraw</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:gravity">center</item>
+    </style>
+    <style name="topround_border">
+        <item name="android:layout_marginTop">150dp</item>
+        <item name="android:background">@drawable/bg_round_top</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:paddingTop">30dp</item>
     </style>
 </resources>

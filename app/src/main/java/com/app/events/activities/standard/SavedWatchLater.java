@@ -153,6 +153,11 @@ public class SavedWatchLater extends AppCompatActivity {
 
         switch (helper.getDataValue("user_type")){
             case "Standard":
+                if (id == R.id.home) {
+                    Intent intent1 = new Intent(this,LandingReservation.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
                 if (id == R.id.my_reservation) {
                     Intent intent1 = new Intent(this,ViewMyReservations.class);
                     this.startActivity(intent1);

@@ -229,6 +229,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/create"
                     style="@style/buttons"
+                    android:layout_marginBottom="80dp"
                     />
                 <Button
                     android:id="@+id/btnNexts"

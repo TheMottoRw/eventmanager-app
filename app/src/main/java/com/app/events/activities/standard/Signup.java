@@ -133,7 +133,7 @@ public class Signup extends Activity {
                             if(object.getString("status").equals("ok")) {
                                 JSONObject obj = object.getJSONObject("data");
                                 if(obj.has("user_type")) {
-                                    helper.setSession(obj.getString("id"),obj.getString("name"),  obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), obj.getString("created_at"));
+                                    helper.setSession(obj.getString("id"),obj.getString("name"),  obj.getString("phone"), obj.getString("email"), obj.getString("user_type"), "",obj.getString("created_at"));
                                     helper.showToast(object.getString("message"));
                                     if (obj.getString("user_type").equals("Standard")) {
                                         startActivity(new Intent(getApplicationContext(), LandingReservation.class));

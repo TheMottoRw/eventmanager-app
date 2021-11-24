@@ -49,6 +49,7 @@ public class Followings extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private TextView headingTitle;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,7 @@ public class Followings extends AppCompatActivity {
         pgdialog.setMessage(getString(R.string.loading));
 
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - Followers");
+        toolbar.setTitle(getString(R.string.app_name) + " - Followers");
         setSupportActionBar(toolbar);
 
         headingTitle = findViewById(R.id.heading_title);
@@ -69,9 +70,10 @@ public class Followings extends AppCompatActivity {
 
         loadFollowings();
     }
-    void loadFollowings(){
-        final String url = helper.host+"/follow/load?user_id="+helper.getDataValue("id");
-        Log.d("URL",url);
+
+    void loadFollowings() {
+        final String url = helper.host + "/follow/load?user_id=" + helper.getDataValue("id");
+        Log.d("URL", url);
         pgdialog.show();
 //        tvLoggingIn.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -82,16 +84,16 @@ public class Followings extends AppCompatActivity {
                     public void onResponse(String response) {
                         // display response
                         pgdialog.dismiss();
-                        Log.d("Logresp",response);
-                        try{
+                        Log.d("Logresp", response);
+                        try {
                             JSONObject object = new JSONObject(response);
                             JSONArray arr = object.getJSONArray("data");
                             FollowingsAdapter adapter = new FollowingsAdapter(getApplicationContext(), arr);
-                            if(arr.length()>0) headingTitle.setVisibility(View.GONE);
+                            if (arr.length() > 0) headingTitle.setVisibility(View.GONE);
                             else headingTitle.setVisibility(View.VISIBLE);
                             recyclerviewFollowings.setAdapter(adapter);
-                        }catch (JSONException ex){
-                            helper.showToast("Json error "+ex.getMessage());
+                        } catch (JSONException ex) {
+                            helper.showToast("Json error " + ex.getMessage());
                         }
                     }
                 },
@@ -100,7 +102,7 @@ public class Followings extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         pgdialog.dismiss();
                         helper.showToast("Something went wrong");
-                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
+                        Log.e("jsonerr", "JSON Error " + (error != null ? error.getMessage() : ""));
                     }
                 }
         ) {
@@ -117,13 +119,15 @@ public class Followings extends AppCompatActivity {
                 headers.put("Authorization", helper.getDataValue("appid"));//put your token here
                 return headers;
             }
-        };;
+        };
+        ;
 
 // add it to the RequestQueue
         queue.add(getRequest);
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         loadFollowings();
     }
@@ -132,17 +136,11 @@ public class Followings extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        if(helper.hasSession()) {
+        if (helper.hasSession()) {
             MenuInflater inflater = getMenuInflater();
-            if(helper.getDataValue("user_type").equals("Standard")) {
-                inflater.inflate(R.menu.standard, menu);
-            }else if(helper.getDataValue("user_type").equals("Business")){
-                inflater.inflate(R.menu.business,menu);
-            }else if(helper.getDataValue("user_type").equals("Admin")){
-                inflater.inflate(R.menu.admin,menu);
-            }
-        }else{
-            getMenuInflater().inflate(R.menu.signin,menu);
+            inflater.inflate(R.menu.standard, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.signin, menu);
         }
 
         return true;
@@ -151,25 +149,31 @@ public class Followings extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Toast.makeText(getApplicationContext(),"Clicked standard user",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Clicked standard user", Toast.LENGTH_LONG).show();
 
-        switch (helper.getDataValue("user_type")){
+        switch (helper.getDataValue("user_type")) {
             case "Standard":
+
+                if (id == R.id.home) {
+                    Intent intent1 = new Intent(this, LandingReservation.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
                 if (id == R.id.my_reservation) {
-                    Intent intent1 = new Intent(this,ViewMyReservations.class);
+                    Intent intent1 = new Intent(this, ViewMyReservations.class);
                     this.startActivity(intent1);
                     return true;
                 }
 
                 if (id == R.id.business) {
-                    Intent intent1 = new Intent(this,EventOriganizers.class);
+                    Intent intent1 = new Intent(this, EventOriganizers.class);
                     this.startActivity(intent1);
                     return true;
                 }
 
 
                 if (id == R.id.watch_later) {
-                    Intent intent1 = new Intent(this,SavedWatchLater.class);
+                    Intent intent1 = new Intent(this, SavedWatchLater.class);
                     this.startActivity(intent1);
                     return true;
                 }
@@ -195,12 +199,12 @@ public class Followings extends AppCompatActivity {
             this.startActivity(intent1);
             return true;
         }
-        if(id == R.id.logout){
+        if (id == R.id.logout) {
             helper.logout();
             finish();
             startActivity(new Intent(Followings.this, Signin.class));
         }
-        if(id == R.id.signin){
+        if (id == R.id.signin) {
             finish();
             startActivity(new Intent(Followings.this, Signin.class));
         }

@@ -58,7 +58,7 @@ public class ViewEventAgenda extends AppCompatActivity implements BaseSliderView
         ViewPagerEx.OnPageChangeListener{
     public TextView eventName,eventType,eventKickOff,eventKickOn,eventBriefDetails,fullDescriptionAgenda,eventPreparedBy,availableSeat;
     public Button arrowBack,btnAddToWatchLater,btnSendReview;
-    public ImageView imgBanners;
+    public ImageView imgBanners,imgAddToWatchLater;
     public Button btnReserve;
     public Helper helper;
     public SwAlertHelper swHelper;
@@ -187,7 +187,7 @@ public class ViewEventAgenda extends AppCompatActivity implements BaseSliderView
         availableSeat = findViewById(R.id.eventAvailableSeat);
         edtReview = findViewById(R.id.edtReview);
         btnReserve = findViewById(R.id.btnReserve);
-        btnAddToWatchLater = findViewById(R.id.btnAddToWatchLater);
+        imgAddToWatchLater = findViewById(R.id.imgAddToWatchLater);
         btnSendReview = findViewById(R.id.btnSendReview);
         btnSendReview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +195,7 @@ public class ViewEventAgenda extends AppCompatActivity implements BaseSliderView
                 sendReview();
             }
         });
-        btnAddToWatchLater.setOnClickListener(new View.OnClickListener() {
+        imgAddToWatchLater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 alert();
@@ -235,12 +235,22 @@ public class ViewEventAgenda extends AppCompatActivity implements BaseSliderView
                 Log.d("Images",obj.getString("images"));
 //                Glide.with(getApplicationContext()).load(images[0])
 //                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);
-                if(!images[0].isEmpty())
-                    HashMapForURL.put(obj.getString("event_name"),images[0]);
-                if(!images[1].isEmpty())
-                    HashMapForURL.put(obj.getString("event_name")+"1",images[1]);
-                if(!images[2].isEmpty())
-                    HashMapForURL.put(obj.getString("event_name")+"2",images[2]);
+                if(!images[0].isEmpty()) {
+                    if (images[0].contains("192.168.43.161"))
+                        images[0] = images[0].replace("http://192.168.43.161:8000", helper.getHost());
+
+                    HashMapForURL.put(obj.getString("event_name"), images[0]);
+                }
+                if(!images[1].isEmpty()) {
+                    if (images[1].contains("192.168.43.161"))
+                        images[1] = images[1].replace("http://192.168.43.161:8000", helper.getHost());
+                    HashMapForURL.put(obj.getString("event_name") + "1", images[1]);
+                }
+                if(!images[2].isEmpty()) {
+                    if (images[2].contains("192.168.43.161"))
+                        images[2] = images[2].replace("http://192.168.43.161:8000", helper.getHost());
+                    HashMapForURL.put(obj.getString("event_name") + "2", images[2]);
+                }
             }else{
 //                Glide.with(getApplicationContext()).load(getDrawable(R.drawable.logo))
 //                        .error(getDrawable(R.drawable.logo)).centerCrop().into(imgBanners);

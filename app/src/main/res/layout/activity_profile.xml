@@ -23,70 +23,205 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_marginTop="100dp"
-            android:src="@drawable/ic_baseline_person_24" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_round_blue"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            >
 
-        <GridLayout
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                app:cardCornerRadius="100dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_baseline_person_24" />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:layout_gravity="center"
-            android:paddingLeft="70dp">
-            <!--            User info-->
-            <TextView
-                android:id="@+id/userLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Logged in as"
-                android:textStyle="bold"/>
+            android:orientation="vertical"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:padding="10dp"
+            android:background="@drawable/bg_round_white"
+            android:layout_marginTop="-100dp">
 
             <TextView
                 android:id="@+id/user"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
-            <!--            User types-->
-            <TextView
-                android:id="@+id/userTypeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/business_type" />
+                android:gravity="center_horizontal"
+                android:text="KayInc"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/userType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp" />
-            <!--phone-->
+                android:layout_marginLeft="5dp"
+                android:text="user type"
+                android:textSize="11sp"
+                android:visibility="visible"
+                android:layout_gravity="center"/>
             <TextView
-                android:id="@+id/userPhoneLabel"
+                android:id="@+id/liner"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:textSize="11sp"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                android:background="@color/lightgrey"
+                android:layout_marginTop="10dp"/>
+            <GridLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/phone" />
+                android:layout_gravity="center_horizontal"
+                android:columnCount="2"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Events"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvFollowsLbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Followers"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorPrimary"/>
+
+
+                <TextView
+                    android:id="@+id/eventsValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="20"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/followersValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="10"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+            </GridLayout>
 
             <TextView
-                android:id="@+id/userPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"/>
-            <!--Email-->
-            <TextView
-                android:id="@+id/userEmailLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/email" />
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/recyclerview" />
 
-            <TextView
-                android:id="@+id/userEmail"
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp" />
-        </GridLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:columnCount="2">
+                <!--            User info-->
 
+                <!--            User types-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/contactAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contact_address"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <!--phone-->
+                <ImageView
+                    android:id="@+id/userPhoneLabel"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ic_baseline_local_phone_24" />
+
+                <TextView
+                    android:id="@+id/userPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp" />
+                <!--Email-->
+                <ImageView
+                    android:id="@+id/userEmailLabel"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_baseline_email_24"
+                    android:text="@string/email" />
+
+                <TextView
+                    android:id="@+id/userEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp" />
+
+                <ImageView
+                    android:id="@+id/userAddressLabel"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_baseline_location_on_24"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/userAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp" />
+
+
+                <TextView
+                    android:id="@+id/userLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logged in as"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+            </GridLayout>
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:text="Logout"
+                style="@style/buttons"
+                android:textSize="14sp"
+               android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

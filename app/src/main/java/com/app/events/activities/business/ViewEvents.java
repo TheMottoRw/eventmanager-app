@@ -24,7 +24,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.admin.ViewBusiness;
+import com.app.events.activities.commons.Profile;
 import com.app.events.activities.commons.Signin;
+import com.app.events.activities.standard.LandingReservation;
 import com.app.events.adapters.EventsBusinessAdapter;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
@@ -156,11 +158,17 @@ public class ViewEvents extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id == R.id.home) {
+            startActivity(new Intent(ViewEvents.this, LandingReservation.class));
+        }
         if (id == R.id.followers) {
             startActivity(new Intent(ViewEvents.this, Followers.class));
         }
         if (id == R.id.notifications) {
             startActivity(new Intent(ViewEvents.this, Notifications.class));
+        }
+        if (id == R.id.profile) {
+            startActivity(new Intent(ViewEvents.this, Profile.class));
         }
         if (id == R.id.logout) {
             helper.logout();

@@ -8,9 +8,14 @@
         android:icon="@drawable/ic_baseline_search_24"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <item
+        android:id="@+id/home"
+        android:title="Home"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_event_24"/>
+    <item
         android:id="@+id/events"
-        android:title="Events"
-        app:showAsAction="always"
+        android:title="My Events"
+        app:showAsAction="never"
         android:icon="@drawable/ic_baseline_event_24"/>
     <item
         android:id="@+id/followers"

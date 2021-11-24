@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
-public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.MyViewHolder> {
+public class ViewEventsAdapter3 extends RecyclerView.Adapter<ViewEventsAdapter3.MyViewHolder> {
     public LinearLayout v;
     public Context ctx;
     public Helper helper;
@@ -46,7 +46,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
     private JSONArray mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ViewEventsAdapter(Context context, JSONArray myDataset) {
+    public ViewEventsAdapter3(Context context, JSONArray myDataset) {
         super();
         mDataset = myDataset;
         ctx = context;
@@ -55,19 +55,19 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ViewEventsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                             int viewType) {
+    public ViewEventsAdapter3.MyViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                              int viewType) {
         // create a new view
         v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_events_2, parent, false);
-        ViewEventsAdapter.MyViewHolder vh = new ViewEventsAdapter.MyViewHolder(v);
+                .inflate(R.layout.recycler_events_3, parent, false);
+        ViewEventsAdapter3.MyViewHolder vh = new ViewEventsAdapter3.MyViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(final ViewEventsAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewEventsAdapter3.MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         try {
@@ -78,9 +78,17 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
             holder.eventType.setText(ctx.getString(R.string.event_type)+": "+ currentObj.getString("event_type"));
             SimpleDateFormat sda = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             SimpleDateFormat sdf = new SimpleDateFormat("E,MMM dd yyyy . hh:mm a");
-            holder.eventStart.setText(sdf.format(sda.parse(currentObj.getString("event_kikoff"))));
+            String event_kikoff = sdf.format(sda.parse(currentObj.getString("event_kikoff")));
+//            holder.eventStart.setText(event_kikoff);
             holder.briefDetails.setText(currentObj.getString("brief_description"));
             holder.eventEnd.setText(ctx.getString(R.string.event_kickon)+": "+ currentObj.getString("event_close"));
+            Log.d("DateSplitting","Date found "+event_kikoff);
+            String[] eventTimeArr = event_kikoff.split(",");
+            String eventDate = eventTimeArr[1].substring(4,7)+"\n"+eventTimeArr[1].substring(0,4),
+                    eventTime = eventTimeArr[1].substring(eventTimeArr[1].length()-9);
+            holder.eventDate.setText(eventDate);
+            holder.eventTime.setText("Start at "+eventTime);
+
             if(!currentObj.has("reserved_seat")){//standard user reservation
                 holder.availableSeat.setText("Reserved on "+sdf.format(sda.parse(currentObj.getString("created_at").replace("T"," "))));
             }else {//business owners
@@ -96,6 +104,8 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
             String images = currentObj.getString("images");
             if(!images.isEmpty() && !images.equals(",,")){
                 String[] imagesArr = images.split(",");
+                if(imagesArr[0].contains("192.168.43.161"))
+                    imagesArr[0] = imagesArr[0].replace("http://192.168.43.161:8000",helper.getHost());
                 Glide.with(ctx).load(imagesArr[0])
                         .error(ctx.getDrawable(R.drawable.logo))
                         .centerCrop().into(holder.imgBanners);
@@ -108,7 +118,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
                 if(helper.getDataValue("user_type").equals("Admin")){
                     Log.d("Parsed","Id "+currentObj.getString("status"));
                     if(currentObj.getString("status").equals("pending")) {
-                            holder.lnyApprovalLayout.setVisibility(View.VISIBLE);
+                        holder.lnyApprovalLayout.setVisibility(View.VISIBLE);
 
                         //Listen to approve and reject
                         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
@@ -198,15 +208,15 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
                 public void onClick(View view) {
                     if(helper.hasSession()){
                         if(helper.getDataValue("user_type").equals("Business")){
-                        //open view full with edit option
-                        try {
-                            Intent intent = new Intent(ctx, ViewReservations.class);
-                            intent.putExtra("event_id", currentObj.getString("id"));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            ctx.startActivity(intent);
-                        }catch (JSONException ex){
+                            //open view full with edit option
+                            try {
+                                Intent intent = new Intent(ctx, ViewReservations.class);
+                                intent.putExtra("event_id", currentObj.getString("id"));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                ctx.startActivity(intent);
+                            }catch (JSONException ex){
 
-                        }
+                            }
                         }else{
                             Intent intent = new Intent(ctx, ViewEventAgenda.class);
                             intent.putExtra("data",currentObj.toString());
@@ -243,7 +253,7 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
     // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView eventId,eventName,eventType,briefDetails,eventStart,eventEnd,availableSeat,eventPreparedBy;
+        public TextView eventId,eventName,eventType,briefDetails,eventStart,eventEnd,availableSeat,eventPreparedBy,eventDate,eventTime;
         public ImageView imgBanners;
         public LinearLayout lnlayout,lnyApprovalLayout,lnyRescheduleLayout;
         public Button btnApprove,btnReject,btnReschedule,btnCancel;
@@ -266,6 +276,9 @@ public class ViewEventsAdapter extends RecyclerView.Adapter<ViewEventsAdapter.My
             btnReject = lny.findViewById(R.id.btnReject);
             btnReschedule = lny.findViewById(R.id.btnReschedule);
             btnCancel = lny.findViewById(R.id.btnCancel);
+
+            eventDate = lny.findViewById(R.id.eventDate);
+            eventTime = lny.findViewById(R.id.eventTime);
             //tvMsg = lny.findViewById(R.id.tvRecyclerDate);
         }
     }

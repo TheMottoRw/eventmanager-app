@@ -125,6 +125,38 @@ public class ViewMyReservations extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id == R.id.home) {
+            Intent intent1 = new Intent(this, LandingReservation.class);
+            this.startActivity(intent1);
+            return true;
+        }
+        if (id == R.id.my_reservation) {
+            Intent intent1 = new Intent(this,ViewMyReservations.class);
+            this.startActivity(intent1);
+            return true;
+        }
+
+        if (id == R.id.followings) {
+            Intent intent1 = new Intent(this,Followings.class);
+            this.startActivity(intent1);
+            return true;
+        }
+        if (id == R.id.business) {
+            Intent intent1 = new Intent(this,EventOriganizers.class);
+            this.startActivity(intent1);
+            return true;
+        }
+
+        if (id == R.id.watch_later) {
+            Intent intent1 = new Intent(this,SavedWatchLater.class);
+            this.startActivity(intent1);
+            return true;
+        }
+        if (id == R.id.locate_businesses) {
+            Intent intent1 = new Intent(this,LocateBusinesses.class);
+            this.startActivity(intent1);
+            return true;
+        }
 
         if (id == R.id.profile) {
             Intent intent1 = new Intent(this, Profile.class);

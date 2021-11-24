@@ -26,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.commons.Signin;
+import com.app.events.activities.standard.LandingReservation;
 import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.adapters.business.ViewReservationsAdapter;
 import com.app.events.utils.Helper;
@@ -155,6 +156,28 @@ public class ViewReservations extends AppCompatActivity {
 
         if(id == android.R.id.home){
             finish();
+        }
+        if (id == R.id.home) {
+            Intent intent1 = new Intent(this, LandingReservation.class);
+            this.startActivity(intent1);
+            return true;
+        }
+        if (id == R.id.events) {
+            Intent intent1 = new Intent(this, ViewEvents.class);
+            this.startActivity(intent1);
+            return true;
+        }
+
+        if (id == R.id.followers) {
+            Intent intent1 = new Intent(this, Followers.class);
+            this.startActivity(intent1);
+            return true;
+        }
+
+        if (id == R.id.notifications) {
+            Intent intent1 = new Intent(this, Notifications.class);
+            this.startActivity(intent1);
+            return true;
         }
         if (id == R.id.logout) {
             helper.logout();

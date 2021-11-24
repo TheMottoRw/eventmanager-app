@@ -27,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
 import com.app.events.activities.commons.Signin;
+import com.app.events.activities.standard.LandingReservation;
 import com.app.events.adapters.business.FollowersAdapter;
 import com.app.events.utils.Helper;
 
@@ -142,18 +143,28 @@ public class Notifications extends AppCompatActivity {
         switch (helper.getDataValue("user_type")){
 
             case "Business":
+                if (id == R.id.home) {
+                    Intent intent1 = new Intent(this, LandingReservation.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
                 if (id == R.id.events) {
-                    finish();
                     Intent intent1 = new Intent(this, ViewEvents.class);
                     this.startActivity(intent1);
                     return true;
                 }
+
                 if (id == R.id.followers) {
-                    finish();
                     Intent intent1 = new Intent(this, Followers.class);
                     this.startActivity(intent1);
                     return true;
                 }
+                if (id == R.id.logout) {
+                    helper.logout();
+                    finish();
+                    startActivity(new Intent(Notifications.this, Signin.class));
+                }
+
                 break;
 
         }

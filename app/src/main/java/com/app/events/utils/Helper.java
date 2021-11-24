@@ -36,21 +36,22 @@ public class Helper {
         sh.apply();
     }
     public String getHost(){
-        String local = "http://192.168.43.161/RUT/Methode/api/requests",
-                remote = "http://192.168.1.8/RUT/Methode/api/requests";
-        return getEditor().getString("host","http://192.168.43.161:8000");
+        String local = "http://10.0.2.2:8000",
+                remote = "http://192.168.8.101:8000";
+        return getEditor().getString("host",local);
     }
 
     public void showToast(String message){
         Toast.makeText(ctx,message,Toast.LENGTH_LONG).show();
     }
-    public void setSession(String sessid,String name,String phone,String email,String category,String created_at){
+    public void setSession(String sessid,String name,String phone,String email,String category,String address,String created_at){
         SharedPreferences.Editor sh = this.getEditor().edit();
         sh.putString("id",sessid);
         sh.putString("name",name);
         sh.putString("user_type",category);
         sh.putString("phone",phone);
         sh.putString("email",email);
+        sh.putString("address",address);
         sh.putString("created_at",created_at);
         sh.apply();
     }

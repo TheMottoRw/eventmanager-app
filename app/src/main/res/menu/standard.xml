@@ -8,9 +8,14 @@
         android:icon="@drawable/ic_baseline_search_24"
         app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <item
+        android:id="@+id/home"
+        android:title="Home"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_branding_watermark_24"/>
+    <item
         android:id="@+id/my_reservation"
         android:title="My Reservation"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:icon="@drawable/ic_baseline_branding_watermark_24"/>
     <item
         android:id="@+id/business"

@@ -6,10 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,6 +24,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
+import com.app.events.activities.admin.Navigation;
+import com.app.events.activities.business.ViewEvents;
+import com.app.events.activities.commons.Profile;
+import com.app.events.activities.commons.Signin;
 import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
 import com.app.events.utils.Helper;
@@ -110,5 +119,92 @@ public class EventOriganizers extends AppCompatActivity {
 // add it to the RequestQueue
         queue.add(getRequest);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+        if (helper.hasSession()) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.standard, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.signin, menu);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Toast.makeText(getApplicationContext(), "Clicked standard user", Toast.LENGTH_LONG).show();
+
+        switch (helper.getDataValue("user_type")) {
+            case "Standard":
+
+                if (id == R.id.home) {
+                    Intent intent1 = new Intent(this, LandingReservation.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+
+                if (id == R.id.my_reservation) {
+                    Intent intent1 = new Intent(this,ViewMyReservations.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+
+                if (id == R.id.followings) {
+                    Intent intent1 = new Intent(this,Followings.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+                if (id == R.id.business) {
+                    Intent intent1 = new Intent(this,EventOriganizers.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+
+                if (id == R.id.watch_later) {
+                    Intent intent1 = new Intent(this,SavedWatchLater.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+                if (id == R.id.locate_businesses) {
+                    Intent intent1 = new Intent(this,LocateBusinesses.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+                break;
+            case "Business":
+                if (id == R.id.events) {
+                    Intent intent1 = new Intent(this, ViewEvents.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+                break;
+            case "Admin":
+                if (id == R.id.business) {
+                    Intent intent1 = new Intent(this, Navigation.class);
+                    this.startActivity(intent1);
+                    return true;
+                }
+                break;
+
+        }
+        if (id == R.id.profile) {
+            Intent intent1 = new Intent(this, Profile.class);
+            this.startActivity(intent1);
+            return true;
+        }
+        if (id == R.id.logout) {
+            helper.logout();
+            finish();
+            startActivity(new Intent(EventOriganizers.this, Signin.class));
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">Emera</string>
+    <string name="app_name">City events</string>
     <string name="header">Event Reservation</string>
     <string name="business_account_header">Create a business account</string>
     <string name="create_account">Create account</string>
+    <string name="contact_address">Contact and address</string>
     <string name="phone">Phone</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
