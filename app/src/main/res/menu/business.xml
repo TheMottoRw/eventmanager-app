@@ -12,6 +12,11 @@
         android:title="Home"
         app:showAsAction="never"
         android:icon="@drawable/ic_baseline_event_24"/>
+ <item
+    android:id="@+id/profile"
+    android:title="Profile"
+    app:showAsAction="never"
+    android:icon="@drawable/ic_baseline_branding_watermark_24"/>
     <item
         android:id="@+id/events"
         android:title="My Events"
@@ -32,9 +37,9 @@
 <!--        android:title="Downloads"-->
 <!--        app:showAsAction="never"-->
 <!--        android:icon="@drawable/ic_baseline_branding_watermark_24"/>-->
-    <item
-        android:id="@+id/profile"
-        android:title="Profile"
+      <item
+        android:id="@+id/report"
+        android:title="Report"
         app:showAsAction="never"
         android:icon="@drawable/ic_baseline_branding_watermark_24"/>
     <item

@@ -32,6 +32,7 @@ import com.app.events.activities.admin.Navigation;
 import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.business.Followers;
 import com.app.events.activities.business.Notifications;
+import com.app.events.activities.business.ReservationReport;
 import com.app.events.activities.business.ViewEvents;
 import com.app.events.activities.commons.Profile;
 import com.app.events.activities.commons.Signin;
@@ -287,6 +288,10 @@ public class LandingReservation extends AppCompatActivity {
                     Intent intent1 = new Intent(this, Notifications.class);
                     this.startActivity(intent1);
                     return true;
+                }
+
+                if (id == R.id.report) {
+                    startActivity(new Intent(LandingReservation.this, ReservationReport.class));
                 }
             break;
             case "Admin":

@@ -2,10 +2,7 @@ package com.app.events.adapters.standard;
 
 
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
@@ -16,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,8 +31,6 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class SavedWatchLaterAdapter extends RecyclerView.Adapter<SavedWatchLaterAdapter.MyViewHolder> {

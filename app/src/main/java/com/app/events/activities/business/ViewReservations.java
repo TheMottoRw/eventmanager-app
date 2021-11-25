@@ -179,6 +179,9 @@ public class ViewReservations extends AppCompatActivity {
             this.startActivity(intent1);
             return true;
         }
+        if (id == R.id.report) {
+            startActivity(new Intent(ViewReservations.this, ReservationReport.class));
+        }
         if (id == R.id.logout) {
             helper.logout();
             finish();

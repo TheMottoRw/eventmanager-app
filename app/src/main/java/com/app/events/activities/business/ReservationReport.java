@@ -2,18 +2,23 @@ package com.app.events.activities.business;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,65 +28,68 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.app.events.R;
-import com.app.events.activities.admin.ViewBusiness;
 import com.app.events.activities.commons.Profile;
 import com.app.events.activities.commons.Signin;
+import com.app.events.activities.standard.EventOriganizers;
 import com.app.events.activities.standard.LandingReservation;
-import com.app.events.adapters.EventsBusinessAdapter;
-import com.app.events.adapters.admin.ViewBusinessAdapter;
 import com.app.events.adapters.business.ViewEventsAdapter;
-import com.app.events.utils.DummyData;
+import com.app.events.adapters.business.ViewReservationsAdapter;
 import com.app.events.utils.Helper;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ViewEvents extends AppCompatActivity {
+public class ReservationReport extends AppCompatActivity  implements AdapterView.OnItemSelectedListener {
     public Helper helper;
     public ProgressDialog pgdialog;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private FloatingActionButton fabAddEvent;
+    String[] list;
+    List<String> lists;
+    private JSONArray array;
+    private Spinner spnEvent;
+    private Button btnDownload;
+    private WebView webView;
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_events);
-
+        setContentView(R.layout.activity_reservation_report);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.app_name)+" - Report");
+        setSupportActionBar(toolbar);
         helper = new Helper(this);
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.loading));
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name)+" - My Events");
-        setSupportActionBar(toolbar);
-        recyclerView = findViewById(R.id.recycler_events);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        fabAddEvent = findViewById(R.id.fabAddEvent);
-        fabAddEvent.setOnClickListener(new View.OnClickListener() {
+        spnEvent = findViewById(R.id.spnEvents);
+        btnDownload = findViewById(R.id.btnDownload);
+        webView = findViewById(R.id.webView);
+
+        btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ViewEvents.this,AddEvent.class));
+                String eventId = "0";
+                try{
+                    JSONObject obj = array.getJSONObject(spnEvent.getSelectedItemPosition());
+                    eventId = obj.getString("id");
+                    Log.d("LoadUrl",helper.host+"/reservation/report?business_id="+helper.getDataValue("id")+"&event_id="+eventId);
+//                    webView.loadUrl(helper.host+"/reservation/report?business_id="+helper.getDataValue("id")+"&event_id="+eventId);
+                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(helper.host+"/reservation/report?business_id="+helper.getDataValue("id")+"&event_id="+eventId));
+                    startActivity(intent);
+
+                }catch(JSONException ex){
+                    Log.d("jsonerr",ex.getMessage());
+                }
             }
         });
         loadEvents();
-    }
-
-    void initDefaultDummyData(){
-        String jsonArr = DummyData.events;
-        try {
-            JSONArray arr = new JSONArray(jsonArr);
-            ViewEventsAdapter adapter = new ViewEventsAdapter(getApplicationContext(),arr);
-            recyclerView.setAdapter(adapter);
-        }catch (JSONException ex){
-            Log.d("jsonerr"," Json data error: "+ex.getMessage());
-        }
     }
 
     void loadEvents(){
@@ -101,9 +109,28 @@ public class ViewEvents extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             if(object.getString("status").equals("ok")) {
-                                JSONArray arr = object.getJSONArray("data");
-                                ViewEventsAdapter adapter = new ViewEventsAdapter(getApplicationContext(), arr);
-                                recyclerView.setAdapter(adapter);
+                                array = object.getJSONArray("data");
+                                Log.d("RepLen","Len "+array.length());
+                                if(array.length()>0) {
+                                    lists = new ArrayList<String>();
+                                    for (int i = 0; i < array.length(); i++) {
+                                        String eventName = array.getJSONObject(i).getString("event_name");
+                                        if(!eventName.isEmpty() && eventName!=null && !eventName.trim().equalsIgnoreCase("null")) {
+                                            lists.add(eventName);
+
+                                        }
+                                    }
+                                    list = new String[lists.size()];
+                                    // Assign list with null removed to String[]
+                                    for(int n=0;n<lists.size();n++){
+                                        list[n] = lists.get(n);
+                                    }
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ReservationReport.this, android.R.layout.simple_spinner_item, list);
+                                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                    spnEvent.setAdapter(adapter);
+                                }else{
+
+                                }
                             }
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
@@ -138,11 +165,17 @@ public class ViewEvents extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-        loadEvents();
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
     }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -159,24 +192,24 @@ public class ViewEvents extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.home) {
-            startActivity(new Intent(ViewEvents.this, LandingReservation.class));
+            startActivity(new Intent(ReservationReport.this, LandingReservation.class));
         }
         if (id == R.id.followers) {
-            startActivity(new Intent(ViewEvents.this, Followers.class));
+            startActivity(new Intent(ReservationReport.this, Followers.class));
         }
         if (id == R.id.notifications) {
-            startActivity(new Intent(ViewEvents.this, Notifications.class));
+            startActivity(new Intent(ReservationReport.this, Notifications.class));
         }
         if (id == R.id.profile) {
-            startActivity(new Intent(ViewEvents.this, Profile.class));
+            startActivity(new Intent(ReservationReport.this, Profile.class));
         }
-        if (id == R.id.report) {
-            startActivity(new Intent(ViewEvents.this, ReservationReport.class));
+        if (id == R.id.events) {
+            startActivity(new Intent(ReservationReport.this, ViewEvents.class));
         }
         if (id == R.id.logout) {
             helper.logout();
             finish();
-            startActivity(new Intent(ViewEvents.this, Signin.class));
+            startActivity(new Intent(ReservationReport.this, Signin.class));
         }
 
 

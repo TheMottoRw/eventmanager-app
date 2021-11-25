@@ -95,4 +95,7 @@
         <item>Mining</item>
         <item>Electronics</item>
     </string-array>
+    <string name="reservation_report_header">Download reservation report</string>
+    <string name="select_event">Select event</string>
+    <string name="download">Download</string>
 </resources>

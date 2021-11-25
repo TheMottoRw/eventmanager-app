@@ -37,8 +37,8 @@ public class Helper {
     }
     public String getHost(){
         String local = "http://10.0.2.2:8000",
-                remote = "http://192.168.8.101:8000";
-        return getEditor().getString("host",local);
+                remote = "http://192.168.8.113:8000";
+        return getEditor().getString("host",remote);
     }
 
     public void showToast(String message){

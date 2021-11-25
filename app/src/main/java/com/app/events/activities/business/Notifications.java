@@ -159,6 +159,9 @@ public class Notifications extends AppCompatActivity {
                     this.startActivity(intent1);
                     return true;
                 }
+                if (id == R.id.report) {
+                    startActivity(new Intent(Notifications.this, ReservationReport.class));
+                }
                 if (id == R.id.logout) {
                     helper.logout();
                     finish();
