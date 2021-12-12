@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -60,16 +62,16 @@ public class ResetPassword extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
 
+        lnyResetPassword = findViewById(R.id.lnyResetPassword);
+        lnyResetCheck = findViewById(R.id.lnyResetCheck);
+        lnyResetVerification = findViewById(R.id.lnyResetVerification);
+
         btnCheck = findViewById(R.id.btnCheck);
         btnVerify = findViewById(R.id.btnVerify);
         btnReset = findViewById(R.id.btnReset);
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addEmail = false;verifyCode = true;resetPassword = false;
-                lnyResetCheck.setVisibility(View.GONE);
-                lnyResetVerification.setVisibility(View.VISIBLE);
-                lnyResetPassword.setVisibility(View.GONE);
                 //send email verify request
                 emailVerification();
             }
@@ -77,10 +79,7 @@ public class ResetPassword extends AppCompatActivity {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addEmail = false;verifyCode = false;resetPassword = true;
-                lnyResetCheck.setVisibility(View.GONE);
-                lnyResetVerification.setVisibility(View.GONE);
-                lnyResetPassword.setVisibility(View.VISIBLE);
+
                 //send code verification request
                 verifyCode();
             }
@@ -88,10 +87,6 @@ public class ResetPassword extends AppCompatActivity {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addEmail = false;verifyCode = false;resetPassword = true;
-                lnyResetCheck.setVisibility(View.GONE);
-                lnyResetVerification.setVisibility(View.GONE);
-                lnyResetPassword.setVisibility(View.VISIBLE);
                 //send new password request
                 updatePassword();
             }
@@ -113,12 +108,18 @@ public class ResetPassword extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             if(object.getString("status").equals("ok")) {
+                                addEmail = false;verifyCode = true;resetPassword = false;
+                                lnyResetCheck.setVisibility(View.GONE);
+                                lnyResetVerification.setVisibility(View.VISIBLE);
+                                lnyResetPassword.setVisibility(View.GONE);
                                 user_id = object.getString("id");
                                 reference_type = object.getString("type");
                                 helper.showToast("Check your email for verification code");
                                 lnyResetCheck.setVisibility(View.GONE);
                                 lnyResetVerification.setVisibility(View.VISIBLE);
                                 lnyResetPassword.setVisibility(View.GONE);
+
+                                helper.showToast(user_id+" and "+reference_type);
 
                             } else  helper.showToast("Email not exist in our database");
                         }catch (JSONException ex){
@@ -131,7 +132,13 @@ public class ResetPassword extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         pgdialog.dismiss();
                         helper.showToast("Something went wrong");
-                        Log.e("jsonerr","JSON Error "+(error!=null?error.getMessage():""));
+                        NetworkResponse response = error.networkResponse;
+                        String errorMsg = "";
+                        if(response != null && response.data != null){
+                            String errorString = new String(response.data);
+                            Log.e("log error", errorString);
+                        }
+                        Log.e("jsonerr","JSON Error "+error.toString()+" == "+response.toString());
                     }
                 }
         ) {
@@ -151,12 +158,17 @@ public class ResetPassword extends AppCompatActivity {
             }
         };
 
-// add it to the RequestQueue
+
+        getRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));// add it to the RequestQueue
         queue.add(getRequest);
     }
     void verifyCode(){
         final String url = helper.host+"/reset/verify";
         pgdialog.show();
+        Log.d("URL",url);
 //        tvLoggingIn.setVisibility(View.VISIBLE);
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 // prepare the Request
@@ -170,14 +182,16 @@ public class ResetPassword extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             if(object.getString("status").equals("ok")) {
-                                user_id = object.getString("id");
-                                reference_type = object.getString("type");
+                                addEmail = false;verifyCode = false;resetPassword = true;
+                                lnyResetCheck.setVisibility(View.GONE);
+                                lnyResetVerification.setVisibility(View.GONE);
+                                lnyResetPassword.setVisibility(View.VISIBLE);
                                 helper.showToast("Code verified,add new password");
                                 lnyResetCheck.setVisibility(View.GONE);
                                 lnyResetVerification.setVisibility(View.GONE);
                                 lnyResetPassword.setVisibility(View.VISIBLE);
 
-                            } else  helper.showToast("Email not exist in our database");
+                            } else  helper.showToast("Wrong verification code");
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }
@@ -197,6 +211,9 @@ public class ResetPassword extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("cate", "verify");
                 params.put("code", edtCode.getText().toString().trim());
+                params.put("reference_id", user_id);
+                params.put("reference_type", reference_type);
+                Log.d("URLParams",params.toString());
                 return params;
             }
 
@@ -227,14 +244,9 @@ public class ResetPassword extends AppCompatActivity {
                         try{
                             JSONObject object = new JSONObject(response);
                             if(object.getString("status").equals("ok")) {
-                                user_id = object.getString("id");
-                                reference_type = object.getString("type");
-                                helper.showToast("Code verified,add new password");
-                                lnyResetCheck.setVisibility(View.GONE);
-                                lnyResetVerification.setVisibility(View.GONE);
-                                lnyResetPassword.setVisibility(View.VISIBLE);
-
-                            } else  helper.showToast("Email not exist in our database");
+                                helper.showToast("Password successuful changed");
+                                finish();
+                            } else  helper.showToast("Failed to change password");
                         }catch (JSONException ex){
                             helper.showToast("Json error "+ex.getMessage());
                         }

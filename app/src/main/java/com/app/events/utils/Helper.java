@@ -37,7 +37,7 @@ public class Helper {
     }
     public String getHost(){
         String local = "http://10.0.2.2:8000",
-                remote = "http://192.168.8.113:8000";
+                remote = "http://192.168.34.120:8000";
         return getEditor().getString("host",remote);
     }
 

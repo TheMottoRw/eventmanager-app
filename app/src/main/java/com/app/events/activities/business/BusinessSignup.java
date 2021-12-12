@@ -57,7 +57,7 @@ import java.util.Map;
 
 public class BusinessSignup extends Activity {
     private static final int REQUEST_LOCATION = 1;
-    private EditText edtBusinessName,edtBusinessType,edtBusinessTin,edtPhone,edtAddress,edtPassword,edtConfirmPassword;
+    private EditText edtBusinessName,edtBusinessType,edtBusinessTin,edtPhone,edtEmail,edtAddress,edtPassword,edtConfirmPassword;
     private Button btnSignup;
     private Spinner spnBusinessType;
     private ProgressDialog pgdialog;
@@ -88,6 +88,7 @@ public class BusinessSignup extends Activity {
         spnBusinessType = findViewById(R.id.spnBusinessType);
         edtBusinessTin = findViewById(R.id.edtBusinessTin);
         edtPhone = findViewById(R.id.edtPhone);
+        edtEmail = findViewById(R.id.edtEmail);
         edtAddress = findViewById(R.id.edtAddress);
         edtPassword = findViewById(R.id.edtPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
@@ -181,6 +182,7 @@ public class BusinessSignup extends Activity {
                 params.put("business_type",spnBusinessType.getSelectedItem().toString().trim());
                 params.put("tin", edtBusinessTin.getText().toString().trim());
                 params.put("phone", edtPhone.getText().toString().trim());
+                params.put("email", edtEmail.getText().toString().trim());
                 params.put("address", edtAddress.getText().toString().trim());
                 params.put("gps_location", latitude+","+longitude);
                 params.put("password", edtPassword.getText().toString().trim());

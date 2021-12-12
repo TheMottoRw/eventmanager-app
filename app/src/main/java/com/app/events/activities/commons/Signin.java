@@ -52,7 +52,7 @@ public class Signin extends Activity {
     private ProgressDialog pgdialog;
     private ImageView imgLogo;
     private LinearLayout lnyHost;
-    private TextView signupBusiness,signupStandard;
+    private TextView signupBusiness,signupStandard,tvForgotPassword;
     private Helper helper;
     private SwAlertHelper swHelper;
     private Validator validator;
@@ -72,9 +72,17 @@ public class Signin extends Activity {
         btnSet = findViewById(R.id.btnSet);
         signupBusiness = findViewById(R.id.tvSignupBusiness);
         signupStandard = findViewById(R.id.tvSignupStandard);
+        tvForgotPassword = findViewById(R.id.tvForgotPassword);
         imgLogo = findViewById(R.id.imgLogo);
         pgdialog = new ProgressDialog(this);
         pgdialog.setMessage(getString(R.string.trylogin));
+
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Signin.this,ResetPassword.class));
+            }
+        });
         signupStandard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,7 +164,7 @@ public class Signin extends Activity {
                                     JSONObject obj = arr.getJSONObject(0);
                                 if(obj.has("user_type")) {
                                     if (obj.getString("user_type").equals("Admin")) {
-                                        helper.setSession(obj.getString("id"), obj.getString("name"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"),obj.getString("address"), obj.getString("created_at"));
+                                        helper.setSession(obj.getString("id"), obj.getString("name"), obj.getString("phone"), obj.getString("email"), obj.getString("user_type"),"", obj.getString("created_at"));
 //                                tvLoggingIn.setVisibility(View.GONE);
                                         helper.showToast("Login success");
                                         startActivity(new Intent(getApplicationContext(), Navigation.class));
